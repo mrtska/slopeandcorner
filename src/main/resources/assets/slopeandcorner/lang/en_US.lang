@@ -1,0 +1,32 @@
+itemGroup.corner=Corner
+itemGroup.slope=Slope
+itemGroup.edgecorner=Edge Corner
+itemGroup.halfslope=Half Slope
+itemGroup.obliqueslope=Nicked Slope
+
+slopeandcorner.key=slopeandcorner
+slopeandcorner.key.desc=Chenge the slope mode
+
+tile.slopeworkbench.name=Slope Workbench
+tile.brokenblock.name=Broken block please destroy this.
+
+slopeandcorner.gui.save=Save
+slopeandcorner.gui.convert=Convert world data
+slopeandcorner.gui.convert.check=Check the world data
+slopeandcorner.gui.convert.do=Convert world data
+slopeandcorner.convert.wait=Analysing world data...
+slopeandcorner.convert.without=The conversion of the world is not necessary
+slopeandcorner.convert.need=It is necessary to convert a world
+slopeandcorner.convert.done=Done
+slopeandcorner.convert.converting=Converting... please wait
+slopeandcorner.convert.count=Total
+slopeandcorner.convert.corner=Corner block
+slopeandcorner.convert.slope=Slope block
+slopeandcorner.convert.edgecorner=Edge corner block
+slopeandcorner.convert.halfslope=Half slope block
+slopeandcorner.convert.slopeworkbench=Slope workbench
+slopeandcorner.convert.obliqueslope=Oblique slope block
+slopeandcorner.convert.overlapslope=Overlap Slope
+slopeandcorner.convert.overlaphalfslope=Overlap half slope
+slopeandcorner.convert.overlapedgecorner=Overlap edge corner
+slopeandcorner.convert.track=Track slope
