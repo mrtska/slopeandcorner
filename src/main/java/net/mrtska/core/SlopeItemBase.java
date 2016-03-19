@@ -12,13 +12,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**[Module AbstractItem.java]
  Copyright(c) 2015 mrtska.starring
@@ -39,7 +40,7 @@ public abstract class SlopeItemBase extends ItemBlock {
 	/**
 	 * アイテムを使った時の処理
 	 */
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float fx, float fy, float fz) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float fx, float fy, float fz) {
 
 		IBlockState iblockstate = world.getBlockState(pos);
 		Block block = iblockstate.getBlock();
@@ -51,16 +52,16 @@ public abstract class SlopeItemBase extends ItemBlock {
 		}
 
 		if (stack.stackSize == 0) { //スタックサイズが0のItemStackが来る場合があるので、そうだった場合は即処理終了
-			return false;
+			return EnumActionResult.FAIL;
 		} else if (!player.canPlayerEdit(pos, side, stack)) {
-			return false;
-		} else if (pos.getY() == 255 && this.block.getMaterial().isSolid()) {
-			return false;
+			return EnumActionResult.FAIL;
+		} else if (pos.getY() == 255 && this.block.getDefaultState().getMaterial().isSolid()) {
+			return EnumActionResult.FAIL;
 		} else if (world.canBlockBePlaced(this.getBlock(), pos, false, side, (Entity) null, stack)) {
 			this.setBlock(world, stack, player, pos, this.block, side, fx, fy, fz);
-			return true;
+			return EnumActionResult.SUCCESS;
 		} else {
-			return false;
+			return EnumActionResult.FAIL;
 		}
 	}
 
@@ -82,18 +83,17 @@ public abstract class SlopeItemBase extends ItemBlock {
 		list.add("BlockString " + compound.getString("BlockString"));
 		list.add("Texture     " + compound.getString("Texture"));
 		list.add("Direction   " + compound.getString("Direction"));
-
 	}
-
+/*
 	@Override
 	@SideOnly(Side.CLIENT)
-	/**
+	*//**
 	 * 草ブロックの上面をデフォルトカラーに
-	 */
+	 *//*
 	public int getColorFromItemStack(ItemStack stack, int renderPass) {
 
 		return this.block.getBlockColor();
-	}
+	}*/
 
 	@Override
 	/**
@@ -105,14 +105,14 @@ public abstract class SlopeItemBase extends ItemBlock {
 
 		if(compound == null) {
 
-			return StatCollector.translateToLocal("tile.brokenblock.name");
+			return I18n.translateToLocal("tile.brokenblock.name");
 		}
 
 		String name = compound.getString("BlockString");
 		String tex = compound.getString("Texture");
 
-		Item item = GameData.getItemRegistry().getObject(name);
+		Item item = GameData.getItemRegistry().getObject(new ResourceLocation(name));
 
-		return StatCollector.translateToLocal(item.getUnlocalizedName(new ItemStack(item, 1, Integer.valueOf(tex.split(":")[0]))) + ".name");
+		return I18n.translateToLocal(item.getUnlocalizedName(new ItemStack(item, 1, Integer.valueOf(tex.split(":")[0]))) + ".name");
 	}
 }

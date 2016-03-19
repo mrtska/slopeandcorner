@@ -71,6 +71,7 @@ public class SlopeEntry {
 
 		register(Blocks.stone, "stone", "stone", "stone_granite", "stone_granite_smooth", "stone_diorite", "stone_diorite_smooth", "stone_andesite", "stone_andesite_smooth");
 		register(Blocks.grass, "grass", "up=grass_top,down=dirt,side=grass_side");
+		register(Blocks.cobblestone, "cobblestone", "cobblestone");
 		register(Blocks.planks, "planks", "planks_oak", "planks_spruce", "planks_birch", "planks_jungle", "planks_acacia", "planks_big_oak");
 		register(Blocks.bedrock, "bedrock", "bedrock");
 		register(Blocks.sand, "sand", "sand", "red_sand");

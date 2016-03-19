@@ -13,9 +13,17 @@
 /Paulscode SoundSystem CodecIBXM License.txt
 /README.txt
 /.classpath
+/logs/
 /gradle/
 /build/
 /eclipse/
+/saves/
+/resourcepacks/
 /.gradle
 /.project
 /.settings
+/crash-reports
+/options.txt
+/*.json
+/config
+/*.setting

@@ -4,9 +4,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -67,6 +72,50 @@ public abstract class MergedSlopeBlockBase extends SlopeBlockBase {
 				.withProperty(textureProperty2, bottomTexture.split(":")[1]).withProperty(directionProperty2, bottomDirection);
 	}
 
+
+	@Override
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+
+		MergedSlopeTileEntity entity = (MergedSlopeTileEntity) world.getTileEntity(pos);
+
+		if(!player.capabilities.isCreativeMode) {
+
+			float f = 0.7F;
+			double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double d3 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			ItemStack stack = new ItemStack(this, 1, 0);
+			EntityItem item = new EntityItem(world, pos.getX() + d1, pos.getY() + d2, pos.getZ() + d3, stack);
+
+			NBTTagCompound compound1 = new NBTTagCompound();
+
+			compound1.setString("BlockString", entity.top.getBlockString());
+			compound1.setString("Texture", entity.top.getTexture());
+			compound1.setString("Direction", "SLOPE:SOUTH");
+
+			item.getEntityItem().setTagCompound(compound1);
+
+			item.setDefaultPickupDelay();
+
+			player.dropItemAndGetStack(item);
+
+			ItemStack stack2 = new ItemStack(this, 1, 0);
+			EntityItem item2 = new EntityItem(world, pos.getX() + d1, pos.getY() + d2, pos.getZ() + d3, stack2);
+
+			NBTTagCompound compound2 = new NBTTagCompound();
+
+			compound2.setString("BlockString", entity.bottom.getBlockString());
+			compound2.setString("Texture", entity.bottom.getTexture());
+			compound2.setString("Direction", "SLOPE:SOUTH");
+
+			item2.getEntityItem().setTagCompound(compound2);
+
+			item2.setDefaultPickupDelay();
+
+			player.dropItemAndGetStack(item2);
+		}
+	}
+
 	@Override
 	/**
 	 * ブロックを破壊した時に出るパーティクルを設定
@@ -82,13 +131,13 @@ public abstract class MergedSlopeBlockBase extends SlopeBlockBase {
 
 		int metadata = Integer.parseInt(tile.top.getTexture().split(":")[0]);
 
-		Block block = GameData.getBlockRegistry().getObject(tile.top.getBlockString());
-		effectRenderer.func_180533_a(pos, block.getStateFromMeta(metadata));
+		Block block = GameData.getBlockRegistry().getObject(new ResourceLocation(tile.top.getBlockString()));
+		effectRenderer.addBlockDestroyEffects(pos, block.getStateFromMeta(metadata));
 		return true;
 	}
 
 	@Override
-	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
 
 		return true;
 	}

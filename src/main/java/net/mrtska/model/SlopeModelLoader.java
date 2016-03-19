@@ -6,7 +6,6 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.mrtska.core.Core;
 import net.mrtska.corner.CornerModel;
 import net.mrtska.corner.merge.MergedCornerModel;
 import net.mrtska.edgecorner.EdgeCornerModel;
@@ -36,7 +35,16 @@ public class SlopeModelLoader implements ICustomModelLoader {
 	//ドメインがmodidと一致したら
 	public boolean accepts(ResourceLocation modelLocation) {
 
-		return modelLocation.getResourceDomain().equals(Core.modid);
+
+		String s = modelLocation.getResourcePath();
+
+		if(s.endsWith(".model")) {
+
+			return true;
+		}
+		//System.out.println(modelLocation.getResourcePath());
+		return false;
+		//return modelLocation.getResourceDomain().equals(Core.modid);
 	}
 
 	@Override
@@ -45,48 +53,48 @@ public class SlopeModelLoader implements ICustomModelLoader {
 
 		String s = modelLocation.getResourcePath();
 
-		if(s.endsWith("/cornerblock")) {
+		if(s.endsWith("/cornerblock.model")) {
 
 			return CornerModel.instance;
 		}
 
-		if(s.endsWith("/mergecornerblock")) {
+		if(s.endsWith("/mergecornerblock.model")) {
 
 			return MergedCornerModel.instance;
 		}
 
-		if(s.endsWith("/slopeblock")) {
+		if(s.endsWith("/slopeblock.model")) {
 
 			return SlopeModel.instance;
 		}
 
-		if(s.endsWith("/mergeslopeblock")) {
+		if(s.endsWith("/mergeslopeblock.model")) {
 
 			return MergedSlopeModel.instance;
 		}
 
-		if(s.endsWith("/edgecornerblock")) {
+		if(s.endsWith("/edgecornerblock.model")) {
 
 			return EdgeCornerModel.instance;
 		}
 
-		if(s.endsWith("/halfslopeblock")) {
+		if(s.endsWith("/halfslopeblock.model")) {
 
 			return HalfSlopeModel.instance;
 		}
 
-		if(s.endsWith("/slopeworkbench")) {
+		if(s.endsWith("/slopeworkbench.model")) {
 
 			return SlopeModel.instance;
 		}
 
-		if(s.endsWith("/doublemergedhalfslopeblock")) {
+		if(s.endsWith("/doublemergedhalfslopeblock.model")) {
 
 			return HalfSlopeModel.instance;
 		}
 
 
-		System.out.println(modelLocation.getResourcePath());
+		System.out.println(modelLocation);
 		return HalfSlopeModel.instance;
 	}
 

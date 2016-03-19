@@ -6,20 +6,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.common.base.Function;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.IModelState;
+import net.minecraftforge.client.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.mrtska.model.SlopeModelEntry.SlopeModelBlock;
-
-import com.google.common.base.Function;
 
 /**[Module AbstractModel.java]
  Copyright(c) 2015 mrtska.starring
@@ -45,9 +45,10 @@ public abstract class SlopeModelBase implements IModel {
 
 	@Override
 	//モデルクッキング
-	public IFlexibleBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 
-		return new BakedSlopeModel(this);
+
+		return new BakedSlopeModel(this, state, format);
 	}
 
 	@Override
@@ -61,11 +62,11 @@ public abstract class SlopeModelBase implements IModel {
 	//デフォルトで
 	public IModelState getDefaultState() {
 
-		return ModelRotation.X0_Y0;
+		return TRSRTransformation.identity();
 	}
 
 	//頂点データを返す テクスチャUV込み
-	public List<BakedQuad> getVertex(String[] directions, String[] textureStrings) {
+	public List<BakedQuad> getVertex(String[] directions, String[] textureStrings, VertexFormat format) {
 
 		List<BakedQuad> ret = new ArrayList<BakedQuad>();
 
@@ -127,7 +128,7 @@ public abstract class SlopeModelBase implements IModel {
 				return ret;
 			}
 
-			ret.addAll(model.makeBakedQuad(texture_down, texture_up, texture_north, texture_east, texture_south, texture_west));
+			ret.addAll(model.makeBakedQuad(format, texture_down, texture_up, texture_north, texture_east, texture_south, texture_west));
 		}
 		return ret;
 	}
@@ -194,4 +195,5 @@ public abstract class SlopeModelBase implements IModel {
 		}
 		return ret;
 	}
+
 }

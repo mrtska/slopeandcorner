@@ -1,7 +1,15 @@
 {
+	"forge_marker": 1,
+    "defaults": {
+        "textures": {
+        },
+        "model": "slopeandcorner:mergeslopeblock.model"
+     },
     "variants": {
-        "normal": [
-            { "model": "slopeandcorner:mergeslopeblock" }
-        ]
+        "normal": [{
+        }],
+        "inventory": [{
+            "transform": "forge:default-block"
+        }]
     }
 }

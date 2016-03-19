@@ -7,9 +7,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.mrtska.block.DoubleMergedSlopeBlockBase;
 import net.mrtska.halfslope.HalfSlopeItem;
@@ -72,20 +72,18 @@ public class DoubleMergedHalfSlopeBlock extends DoubleMergedSlopeBlockBase {
 			tileEntity.top2.setTexture(compound.getString("Texture"));
 			tileEntity.top2.setDirection(directionString);
 
-			world.markBlockForUpdate(pos);
+			world.markBlockRangeForRenderUpdate(pos, pos);
 			return true;
 		}
 
 		if(bottom2Direction.equals("null")) {
-
 
 			NBTTagCompound compound = itemStack.getTagCompound();
 			tileEntity.bottom2.setBlockString(compound.getString("BlockString"));
 			tileEntity.bottom2.setTexture(compound.getString("Texture"));
 			tileEntity.bottom2.setDirection("HALFSLOPE:R" + SlopeUtils.convertDirection(top2Direction.split(":")[1]));
 
-
-			world.markBlockForUpdate(pos);
+			world.markBlockRangeForRenderUpdate(pos, pos);
 			return true;
 		}
 
@@ -95,7 +93,7 @@ public class DoubleMergedHalfSlopeBlock extends DoubleMergedSlopeBlockBase {
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB alignedBB, List list, Entity entity) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB alignedBB, List list, Entity entity) {
 
 		DoubleMergedSlopeTileEntity tileEntity = (DoubleMergedSlopeTileEntity) world.getTileEntity(pos);
 

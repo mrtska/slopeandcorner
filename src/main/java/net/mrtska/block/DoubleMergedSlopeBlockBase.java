@@ -5,8 +5,9 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -92,8 +93,8 @@ public abstract class DoubleMergedSlopeBlockBase extends MergedSlopeBlockBase {
 
 			int metadata = Integer.parseInt(tile.top.getTexture().split(":")[0]);
 
-			Block block = GameData.getBlockRegistry().getObject(tile.top.getBlockString());
-			effectRenderer.func_180533_a(pos, block.getStateFromMeta(metadata));
+			Block block = GameData.getBlockRegistry().getObject(new ResourceLocation(tile.top.getBlockString()));
+			effectRenderer.addBlockDestroyEffects(pos, block.getStateFromMeta(metadata));
 			return true;
 
 		} catch(Exception e) {
@@ -104,7 +105,7 @@ public abstract class DoubleMergedSlopeBlockBase extends MergedSlopeBlockBase {
 	}
 
 	@Override
-	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
 
 		return true;
 	}

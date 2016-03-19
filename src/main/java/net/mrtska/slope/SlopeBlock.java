@@ -7,9 +7,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.mrtska.block.SlopeBlockBase;
@@ -95,7 +95,7 @@ public class SlopeBlock extends SlopeBlockBase {
 
 	@Override
 	//松明などが刺さる向きを設定
-	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 
 		SlopeTileEntity tileEntity = (SlopeTileEntity) world.getTileEntity(pos);
 		String direction = tileEntity.getDirection().split(":")[1];
@@ -178,7 +178,7 @@ public class SlopeBlock extends SlopeBlockBase {
 
 	@Override
 	//当たり判定を設定
-	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB alignedBB, List list, Entity entity) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB alignedBB, List list, Entity entity) {
 
 		SlopeTileEntity tileEntity = (SlopeTileEntity) world.getTileEntity(pos);
 

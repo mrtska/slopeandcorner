@@ -3,9 +3,9 @@ package net.mrtska.workbench;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockSnow;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -15,9 +15,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 /**[Module SlopeWorkbenchItem.java]
@@ -34,7 +37,7 @@ public class SlopeWorkbenchItem extends ItemBlock {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 
 		IBlockState iblockstate = world.getBlockState(pos);
 		Block block = iblockstate.getBlock();
@@ -46,11 +49,11 @@ public class SlopeWorkbenchItem extends ItemBlock {
 		}
 
 		if (stack.stackSize == 0) { //スタックサイズが0のItemStackが来る場合があるので、そうだった場合は即処理終了
-			return false;
+			return EnumActionResult.FAIL;
 		} else if (!player.canPlayerEdit(pos, side, stack)) {
-			return false;
-		} else if (pos.getY() == 255 && this.block.getMaterial().isSolid()) {
-			return false;
+			return EnumActionResult.FAIL;
+		} else if (pos.getY() == 255 && this.block.getDefaultState().getMaterial().isSolid()) {
+			return EnumActionResult.FAIL;
 		} else if (world.canBlockBePlaced(this.getBlock(), pos, false, side, (Entity) null, stack)) {
 			int direction = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5F) & 3;
 			String directionString = "SLOPE:";
@@ -78,13 +81,13 @@ public class SlopeWorkbenchItem extends ItemBlock {
 			tileEntity.setDirection(directionString);
 
 			Block b = Blocks.crafting_table;
-			SoundType sound = b.stepSound;
-			world.playSoundEffect((double) ((float) pos.getX() + 0.5F), (double) ((float) pos.getY() + 0.5F), (double) ((float) pos.getZ() + 0.5F), sound.getPlaceSound(), (sound.getVolume() + 1.0F) / 2.0F, sound.getFrequency() * 0.8F);
+			SoundType sound = b.getStepSound();
+			world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 			stack.stackSize--;
 
-			return true;
+			return EnumActionResult.SUCCESS;
 		} else {
-			return false;
+			return EnumActionResult.FAIL;
 		}
 	}
 

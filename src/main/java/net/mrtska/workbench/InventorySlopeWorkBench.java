@@ -3,7 +3,7 @@ package net.mrtska.workbench;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  [Module InventorySlopeWorkbench.java]
@@ -55,10 +55,6 @@ public class InventorySlopeWorkBench implements IInventory {
 		}
 	}
 
-	@Override
-	public ItemStack getStackInSlotOnClosing(int index) {
-		return null;
-	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
@@ -105,7 +101,7 @@ public class InventorySlopeWorkBench implements IInventory {
 
 
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 
 		return null;
 	}
@@ -142,6 +138,13 @@ public class InventorySlopeWorkBench implements IInventory {
 
 	@Override
 	public void clear() {
+	}
+
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+
+		return null;
 	}
 
 }

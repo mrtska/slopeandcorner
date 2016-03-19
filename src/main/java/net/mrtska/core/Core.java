@@ -1,11 +1,22 @@
 package net.mrtska.core;
 
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ColorizerGrass;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -15,6 +26,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.mrtska.block.SlopeBlockBase;
 import net.mrtska.block.SlopeTab;
 import net.mrtska.corner.CornerBlock;
 import net.mrtska.corner.CornerItem;
@@ -78,7 +90,6 @@ public class Core {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(SlopeBlock.instance), 0, new ModelResourceLocation("slopeandcorner:slopeblock", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(EdgeCornerBlock.instance), 0, new ModelResourceLocation("slopeandcorner:edgecornerblock", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(HalfSlopeBlock.instance), 0, new ModelResourceLocation("slopeandcorner:halfslopeblock", "inventory"));
-
 
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(SlopeWorkBench.instance), 0, new ModelResourceLocation("slopeandcorner:slopeworkbench", "inventory"));
 
@@ -173,6 +184,50 @@ public class Core {
 		SlopeRecipeGuideButton.init();
 
 		HANDLER.postInitialise();
+
+
+		final BlockColors block = FMLClientHandler.instance().getClient().getBlockColors();
+
+		block.registerBlockColorHandler(new IBlockColor() {
+
+			@Override
+			public int colorMultiplier(IBlockState state, IBlockAccess p_186720_2_, BlockPos pos, int tintIndex) {
+
+
+				if(((IExtendedBlockState)state).getValue(SlopeBlockBase.textureProperty).contains("grass")) {
+
+					return p_186720_2_ != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(p_186720_2_, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+				}
+
+				return 0xFFFFFFFF;
+
+			 		}
+		}, CornerBlock.instance, SlopeBlock.instance, EdgeCornerBlock.instance, HalfSlopeBlock.instance);
+
+
+		ItemColors color = FMLClientHandler.instance().getClient().getItemColors();
+		color.registerItemColorHandler(new IItemColor() {
+
+			@Override
+			public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+
+				if(stack.hasTagCompound()) {
+
+					if(stack.getTagCompound().getString("BlockString").equals("minecraft:grass")) {
+
+						IBlockState iblockstate = Blocks.grass.getStateFromMeta(0);
+		                return block.colorMultiplier(iblockstate, (IBlockAccess)null, (BlockPos)null, tintIndex);
+					}
+
+
+					return 0xFFFFFFFF;
+				}
+
+				return 0xFFFFFFFF;
+			}
+		}, CornerBlock.instance, SlopeBlock.instance, EdgeCornerBlock.instance, HalfSlopeBlock.instance);
+
+
 
 	}
 
