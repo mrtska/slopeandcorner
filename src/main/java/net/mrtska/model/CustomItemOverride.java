@@ -1,9 +1,8 @@
-package net.mrtska.model;
+	package net.mrtska.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
@@ -52,7 +51,6 @@ public class CustomItemOverride extends ItemOverrideList {
 			texture = compound.getString("Texture").split(":")[1];
 		}
 
-		IBakedModel itemStackModel = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
 
 		if(originalModel instanceof BakedSlopeModel) {
 
@@ -60,6 +58,7 @@ public class CustomItemOverride extends ItemOverrideList {
 			model.texture = new String[] { texture };
 			model.direction = new String[] { compound.getString("Direction") };
 			model.vertexData = model.getModel().getVertex(model.direction, model.texture, model.format);
+
 			return model;
 		}
 

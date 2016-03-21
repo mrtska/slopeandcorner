@@ -193,16 +193,55 @@ public class Core {
 			@Override
 			public int colorMultiplier(IBlockState state, IBlockAccess p_186720_2_, BlockPos pos, int tintIndex) {
 
+				if(state instanceof IExtendedBlockState) {
 
-				if(((IExtendedBlockState)state).getValue(SlopeBlockBase.textureProperty).contains("grass")) {
+					if(((IExtendedBlockState)state).getValue(SlopeBlockBase.textureProperty).contains("grass")) {
 
-					return p_186720_2_ != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(p_186720_2_, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+						return p_186720_2_ != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(p_186720_2_, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+					}
 				}
 
 				return 0xFFFFFFFF;
-
-			 		}
+			}
 		}, CornerBlock.instance, SlopeBlock.instance, EdgeCornerBlock.instance, HalfSlopeBlock.instance);
+
+		block.registerBlockColorHandler(new IBlockColor() {
+
+			@Override
+			public int colorMultiplier(IBlockState state, IBlockAccess p_186720_2_, BlockPos pos, int tintIndex) {
+
+				if(state instanceof IExtendedBlockState) {
+
+					if(((IExtendedBlockState)state).getValue(SlopeBlockBase.textureProperty).contains("grass") ||
+							((IExtendedBlockState)state).getValue(MergedSlopeBlock.textureProperty2).contains("grass")) {
+
+						return p_186720_2_ != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(p_186720_2_, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+					}
+				}
+
+				return 0xFFFFFFFF;
+			}
+		}, MergedSlopeBlock.instance);
+
+		block.registerBlockColorHandler(new IBlockColor() {
+
+			@Override
+			public int colorMultiplier(IBlockState state, IBlockAccess p_186720_2_, BlockPos pos, int tintIndex) {
+
+				if(state instanceof IExtendedBlockState) {
+
+					if(((IExtendedBlockState)state).getValue(SlopeBlockBase.textureProperty).contains("grass") ||
+							((IExtendedBlockState)state).getValue(MergedSlopeBlock.textureProperty2).contains("grass") ||
+							((IExtendedBlockState)state).getValue(DoubleMergedHalfSlopeBlock.textureProperty3).contains("grass") ||
+							((IExtendedBlockState)state).getValue(DoubleMergedHalfSlopeBlock.textureProperty4).contains("grass")) {
+
+						return p_186720_2_ != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(p_186720_2_, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+					}
+				}
+
+				return 0xFFFFFFFF;
+			}
+		}, DoubleMergedHalfSlopeBlock.instance);
 
 
 		ItemColors color = FMLClientHandler.instance().getClient().getItemColors();
@@ -226,8 +265,6 @@ public class Core {
 				return 0xFFFFFFFF;
 			}
 		}, CornerBlock.instance, SlopeBlock.instance, EdgeCornerBlock.instance, HalfSlopeBlock.instance);
-
-
 
 	}
 

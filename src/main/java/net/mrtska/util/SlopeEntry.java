@@ -71,6 +71,7 @@ public class SlopeEntry {
 
 		register(Blocks.stone, "stone", "stone", "stone_granite", "stone_granite_smooth", "stone_diorite", "stone_diorite_smooth", "stone_andesite", "stone_andesite_smooth");
 		register(Blocks.grass, "grass", "up=grass_top,down=dirt,side=grass_side");
+		register(Blocks.dirt, "dirt", "dirt", "coarse_dirt", "up=dirt_podzol_top,down=dirt,side=dirt_podzol_side");
 		register(Blocks.cobblestone, "cobblestone", "cobblestone");
 		register(Blocks.planks, "planks", "planks_oak", "planks_spruce", "planks_birch", "planks_jungle", "planks_acacia", "planks_big_oak");
 		register(Blocks.bedrock, "bedrock", "bedrock");
@@ -117,7 +118,7 @@ public class SlopeEntry {
 		register(Blocks.quartz_block, "quartz_block", "up=quartz_block_top,down=quartz_block_bottom,side=quartz_block_side",
 														"up=quartz_block_chiseled_top,down=quartz_block_chiseled_top,side=quartz_block_chiseled",
 														"up=quartz_block_lines_top,down=quartz_block_lines_top,side=quartz_block_lines");
-		register(Blocks.stained_hardened_clay, "stained_hardened_clay", "hardened_clay", "hardened_clay_stained_orange", "hardened_clay_stained_magenta",
+		register(Blocks.stained_hardened_clay, "stained_hardened_clay", "hardened_clay_stained_white", "hardened_clay_stained_orange", "hardened_clay_stained_magenta",
 																		"hardened_clay_stained_light_blue", "hardened_clay_stained_yellow",
 																		"hardened_clay_stained_lime", "hardened_clay_stained_pink",
 																		"hardened_clay_stained_gray", "hardened_clay_stained_silver",
@@ -135,6 +136,12 @@ public class SlopeEntry {
 		register(Blocks.red_sandstone, "red_sandstone", "up=red_sandstone_top,down=red_sandstone_bottom,side=red_sandstone_normal",
 														"up=red_sandstone_top,down=red_sandstone_top,side=red_sandstone_carved",
 														"up=red_sandstone_top,down=red_sandstone_top,side=red_sandstone_smooth");
+
+		register(Blocks.purpur_block, "purpur_block", "purpur_block");
+		register(Blocks.purpur_pillar, "purpur_pillar", "up=purpur_pillar_top,down=purpur_pillar_top,side=purpur_pillar",
+				"down=purpur_pillar,up=purpur_pillar,west=purpur_pillar,east=purpur_pillar,north=purpur_pillar_top,south=purpur_pillar_top",
+				"down=purpur_pillar,up=purpur_pillar,west=purpur_pillar_top,east=purpur_pillar_top,north=purpur_pillar,south=purpur_pillar");
+		register(Blocks.end_bricks, "end_bricks", "end_bricks");
 
 
 	}

@@ -1,16 +1,21 @@
 package net.mrtska.workbench;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -120,6 +125,34 @@ public class SlopeWorkBench extends SlopeBlockBase {
 		return new SlopeWorkBenchTileEntity();
 	}
 
+
+
+	@Override
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+
+		if(!player.capabilities.isCreativeMode) {
+
+			SlopeWorkBenchTileEntity entity = (SlopeWorkBenchTileEntity) world.getTileEntity(pos);
+
+			float f = 0.7F;
+			double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double d3 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			ItemStack stack = new ItemStack(this, 1, 0);
+			EntityItem item = new EntityItem(world, pos.getX() + d1, pos.getY() + d2, pos.getZ() + d3, stack);
+
+			NBTTagCompound compound = new NBTTagCompound();
+
+			compound.setString("Direction", "SLOPE:SOUTH");
+
+			item.getEntityItem().setTagCompound(compound);
+
+			item.setDefaultPickupDelay();
+
+			player.dropItemAndGetStack(item);
+		}
+	}
+
 	@Override
 	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
 
@@ -129,9 +162,35 @@ public class SlopeWorkBench extends SlopeBlockBase {
 	}
 
 	@Override
-	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+	public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, EffectRenderer effectRenderer) {
 
-		return super.addHitEffects(state, worldObj, target, effectRenderer);
+		BlockPos pos = target.getBlockPos();
+		SlopeWorkBenchTileEntity tile = (SlopeWorkBenchTileEntity) world.getTileEntity(pos);
+		Random rand = new Random();
+
+		//nullだった時はパーティクルを出さない
+		if(tile == null) {
+
+			return true;
+		}
+
+		Block block = Blocks.crafting_table;
+		IBlockState iblockstate = block.getStateFromMeta(0);
+
+		if (block.getRenderType(state) != EnumBlockRenderType.INVISIBLE) {
+			int i = pos.getX();
+			int j = pos.getY();
+			int k = pos.getZ();
+			float f = 0.1F;
+			AxisAlignedBB aabb = block.getBoundingBox(state, world, pos);
+
+			double d0 = (double)i + rand.nextDouble() * (aabb.maxX - aabb.minX - (double)(f * 2.0F)) + (double)f + aabb.minX;
+			double d1 = (double)j + rand.nextDouble() * (aabb.maxY - aabb.minY - (double)(f * 2.0F)) + (double)f + aabb.minY;
+			double d2 = (double)k + rand.nextDouble() * (aabb.maxZ - aabb.minZ - (double)(f * 2.0F)) + (double)f + aabb.minZ;
+			EntityDiggingFX entity = (EntityDiggingFX) new EntityDiggingFX.Factory().getEntityFX(0, world, d0, d1, d2, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
+
+			effectRenderer.addEffect(entity.setBlockPos(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+		}
+		return true;
 	}
-
 }

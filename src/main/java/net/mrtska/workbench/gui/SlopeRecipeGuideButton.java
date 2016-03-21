@@ -14,6 +14,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.mrtska.corner.CornerBlock;
+import net.mrtska.edgecorner.EdgeCornerBlock;
+import net.mrtska.halfslope.HalfSlopeBlock;
+import net.mrtska.slope.SlopeBlock;
 
 
 @SideOnly(Side.CLIENT)
@@ -105,10 +108,20 @@ public class SlopeRecipeGuideButton extends GuiButton {
 
 	public static void init() {
 
-		drawList.add(getItemStack(CornerBlock.instance, "minecraft:planks", "SOUTH", "0:planks_oak"));
-		drawList.add(getItemStack(CornerBlock.instance, "minecraft:planks", "RSOUTH", "0:planks_oak"));
-		drawList.add(getItemStack(CornerBlock.instance, "minecraft:planks", "SOUTH2", "0:planks_oak"));
-		drawList.add(getItemStack(CornerBlock.instance, "minecraft:planks", "RSOUTH2", "0:planks_oak"));
+		drawList.add(getItemStack(CornerBlock.instance, "minecraft:planks", "CORNER:SOUTH", "0:planks_oak"));
+		drawList.add(getItemStack(CornerBlock.instance, "minecraft:planks", "CORNER:RSOUTH", "0:planks_oak"));
+		drawList.add(getItemStack(CornerBlock.instance, "minecraft:planks", "CORNER:SOUTH2", "0:planks_oak"));
+		drawList.add(getItemStack(CornerBlock.instance, "minecraft:planks", "CORNER:RSOUTH2", "0:planks_oak"));
+
+		drawList.add(getItemStack(SlopeBlock.instance, "minecraft:planks", "SLOPE:SOUTH", "0:planks_spruce"));
+		drawList.add(getItemStack(SlopeBlock.instance, "minecraft:planks", "SLOPE:RSOUTH", "0:planks_spruce"));
+		drawList.add(getItemStack(SlopeBlock.instance, "minecraft:planks", "SLOPE:SOUTH2", "0:planks_spruce"));
+
+		drawList.add(getItemStack(EdgeCornerBlock.instance, "minecraft:planks", "EDGECORNER:SOUTH", "0:planks_birch"));
+		drawList.add(getItemStack(EdgeCornerBlock.instance, "minecraft:planks", "EDGECORNER:RSOUTH", "0:planks_birch"));
+
+		drawList.add(getItemStack(HalfSlopeBlock.instance, "minecraft:planks", "HALFSLOPE:SOUTH", "0:planks_jungle"));
+		drawList.add(getItemStack(HalfSlopeBlock.instance, "minecraft:planks", "HALFSLOPE:RSOUTH", "0:planks_jungle"));
 
 
 

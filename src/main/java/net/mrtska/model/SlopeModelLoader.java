@@ -6,6 +6,7 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.mrtska.core.Core;
 import net.mrtska.corner.CornerModel;
 import net.mrtska.corner.merge.MergedCornerModel;
 import net.mrtska.edgecorner.EdgeCornerModel;
@@ -29,6 +30,7 @@ public class SlopeModelLoader implements ICustomModelLoader {
 	@Override
 	//よく分からん
 	public void onResourceManagerReload(IResourceManager resourceManager) {
+
 	}
 
 	@Override
@@ -36,15 +38,17 @@ public class SlopeModelLoader implements ICustomModelLoader {
 	public boolean accepts(ResourceLocation modelLocation) {
 
 
-		String s = modelLocation.getResourcePath();
+		if(!modelLocation.getResourceDomain().equals(Core.modid)) {
 
-		if(s.endsWith(".model")) {
+			return false;
+		}
+
+		if(modelLocation.getResourcePath().endsWith(".model")) {
 
 			return true;
 		}
-		//System.out.println(modelLocation.getResourcePath());
+
 		return false;
-		//return modelLocation.getResourceDomain().equals(Core.modid);
 	}
 
 	@Override
@@ -93,8 +97,6 @@ public class SlopeModelLoader implements ICustomModelLoader {
 			return HalfSlopeModel.instance;
 		}
 
-
-		System.out.println(modelLocation);
 		return HalfSlopeModel.instance;
 	}
 

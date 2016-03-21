@@ -26,4 +26,6 @@
 /options.txt
 /*.json
 /config
+/screenshots
 /*.setting
+*.log

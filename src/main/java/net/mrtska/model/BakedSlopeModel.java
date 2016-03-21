@@ -1,6 +1,7 @@
 package net.mrtska.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.vecmath.Matrix4f;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -111,9 +113,10 @@ public class BakedSlopeModel implements IPerspectiveAwareModel {
 
 		if(side != null) {
 
-			return new ArrayList<>();
+			return Collections.EMPTY_LIST;
 		}
 
+		//アイテム描画時
 		if(state == null) {
 
 			return vertexData;
@@ -154,88 +157,21 @@ public class BakedSlopeModel implements IPerspectiveAwareModel {
 	public SlopeModelBase getModel() {
 		return model;
 	}
-/*
-	@Override
-	//デフォルトで
-	public VertexFormat getFormat() {
-
-		return Attributes.DEFAULT_BAKED_FORMAT;
-	}
-*/
-/*	@Override
-	//ブロックステートを受け取る ブロックレンダリング時
-	public IBakedModel handleBlockState(IBlockState state) {
-
-		this.state = (IExtendedBlockState)state;
-
-		if(this.state == null) {
-
-			return this;
-		}
-
-		this.texture[0] = ((IExtendedBlockState)state).getValue(SlopeBlockBase.textureProperty);
-		this.direction[0] = this.state.getValue(SlopeBlockBase.directionProperty);
-
-
-		if(((IExtendedBlockState)state).getBlock() instanceof MergedSlopeBlockBase) {
-
-			this.texture[1] = ((IExtendedBlockState)state).getValue(MergedSlopeBlockBase.textureProperty2);
-			this.direction[1] = ((IExtendedBlockState)state).getValue(MergedSlopeBlockBase.directionProperty2);
-		}
-		if(((IExtendedBlockState)state).getBlock() instanceof DoubleMergedSlopeBlockBase) {
-
-			this.texture[2] = ((IExtendedBlockState)state).getValue(DoubleMergedSlopeBlockBase.textureProperty3);
-			this.direction[2] = ((IExtendedBlockState)state).getValue(DoubleMergedSlopeBlockBase.directionProperty3);
-			this.texture[3] = ((IExtendedBlockState)state).getValue(DoubleMergedSlopeBlockBase.textureProperty4);
-			this.direction[3] = ((IExtendedBlockState)state).getValue(DoubleMergedSlopeBlockBase.directionProperty4);
-
-		}
-
-		this.vertexData = model.getVertex(this.direction, this.texture);
-
-		this.isItemRendering = false;
-		return this;
-	}
-
-	@Override
-	//ItemStackを受け取る アイテムレンダリング時
-	public IBakedModel handleItemState(ItemStack stack) {
-
-		if(!stack.hasTagCompound()) {
-
-			System.out.println("BakedSlopeModel.handleItemState()");
-			return this;
-		}
-
-		NBTTagCompound compound = stack.getTagCompound();
-		String block = compound.getString("BlockString");
-
-
-		String texture = compound.getString("Texture");
-
-		if(texture.contains(":")) {
-
-			texture = compound.getString("Texture").split(":")[1];
-		}
-
-		this.texture = new String[] { texture };
-		this.direction = new String[] { compound.getString("Direction") };
-		this.vertexData = model.getVertex(this.direction, this.texture);
-		this.isItemRendering = true;
-		return this;
-	}
-*/
 
 	@Override
 	public ItemOverrideList getOverrides() {
-
-
 
 		return new CustomItemOverride();
 	}
 
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
+
+
+		if(type == TransformType.GUI) {
+
+			GlStateManager.disableLighting();
+		}
 
 		return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, state, type);
 	}

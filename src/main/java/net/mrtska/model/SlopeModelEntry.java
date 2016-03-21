@@ -11,12 +11,13 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
 
 /**[Module SlopeModelEntry.java]
- Copyright(c) 2015 mrtska.starring
- This software is released under the MIT License.
- http://opensource.org/licenses/mit-license.php
- Created on: 2015/05/06
+Copyright(c) 2015 mrtska.starring
+This software is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+Created on: 2015/05/06
 */
 public class SlopeModelEntry {
 
@@ -42,8 +43,23 @@ public class SlopeModelEntry {
 			this.side = side;
 		}
 
+
+
+		private int getFaceShadeColor(EnumFacing facing)
+		{
+
+			if(!Minecraft.isAmbientOcclusionEnabled()) {
+
+				return getFaceDefaultBrightness(facing);
+			}
+
+			float f = this.getFaceBrightness(facing);
+			int i = MathHelper.clamp_int((int)(f * 255.0F), 0, 255);
+			return -16777216 | i << 16 | i << 8 | i;
+		}
+
 		//向きによって明るさを変える
-		private int getFaceBrightness(EnumFacing side) {
+		private int getFaceDefaultBrightness(EnumFacing side) {
 			switch(side) {
 			case DOWN:
 				return 0xFF888888;
@@ -59,12 +75,35 @@ public class SlopeModelEntry {
 				return 0xFFFFFFFF;
 			}
 		}
+
+		private float getFaceBrightness(EnumFacing facing)
+		{
+			switch (facing)
+			{
+				case DOWN:
+					return 0.5F;
+				case UP:
+					return 1.0F;
+				case NORTH:
+				case SOUTH:
+					return 1F;
+				case WEST:
+					return 0.775F;
+				case EAST:
+					return 0.7F;
+				default:
+					return 1.0F;
+			}
+		}
+
 		private int[] vertexToInts(TextureAtlasSprite texture) {
+
+
 			return new int[] {
 					Float.floatToRawIntBits(x),
 					Float.floatToRawIntBits(y),
 					Float.floatToRawIntBits(z),
-					getFaceBrightness(side),
+					getFaceShadeColor(side),
 					Float.floatToRawIntBits(texture.getInterpolatedU(u)),
 					Float.floatToRawIntBits(texture.getInterpolatedV(v)),
 					0
