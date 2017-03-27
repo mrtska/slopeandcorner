@@ -1,7 +1,15 @@
 {
+	"forge_marker": 1,
+    "defaults": {
+        "textures": {
+        },
+        "model": "slopeandcorner:doublemergedhalfslopeblock.model"
+     },
     "variants": {
-        "normal": [
-            { "model": "slopeandcorner:doublemergedhalfslopeblock" }
-        ]
+        "normal": [{
+        }],
+        "inventory": [{
+            "transform": "forge:default-block"
+        }]
     }
 }

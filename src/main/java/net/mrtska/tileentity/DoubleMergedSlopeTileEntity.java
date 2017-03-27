@@ -47,7 +47,7 @@ public class DoubleMergedSlopeTileEntity extends MergedSlopeTileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 
 		super.writeToNBT(compound);
 
@@ -60,6 +60,8 @@ public class DoubleMergedSlopeTileEntity extends MergedSlopeTileEntity {
 
 		compound.setTag("Top2", top2);
 		compound.setTag("Bottom2", bottom2);
+
+		return compound;
 	}
 
 

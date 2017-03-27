@@ -3,10 +3,9 @@ package net.mrtska.workbench.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.mrtska.core.Core;
 import net.mrtska.network.PacketInteger;
 import net.mrtska.workbench.ContainerSlopeWorkBench;
 
@@ -67,7 +66,7 @@ public class GuiSlopeWorkBench extends GuiContainer {
 		PacketInteger index = new PacketInteger();
 		index.index = this.button.getDrawIndex();
 		container.drawIndex = index.index;
-		Core.HANDLER.sendToServer(index);
+		//Core.HANDLER.sendToServer(index);
 	}
 
 

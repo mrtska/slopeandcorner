@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.primitives.Ints;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
-
-import com.google.common.primitives.Ints;
+import net.minecraft.util.math.MathHelper;
 
 /**[Module SlopeModelEntry.java]
- Copyright(c) 2015 mrtska.starring
- This software is released under the MIT License.
- http://opensource.org/licenses/mit-license.php
- Created on: 2015/05/06
+Copyright(c) 2015 mrtska.starring
+This software is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+Created on: 2015/05/06
 */
 public class SlopeModelEntry {
 
@@ -41,8 +43,23 @@ public class SlopeModelEntry {
 			this.side = side;
 		}
 
+
+
+		private int getFaceShadeColor(EnumFacing facing)
+		{
+
+			if(!Minecraft.isAmbientOcclusionEnabled()) {
+
+				return getFaceDefaultBrightness(facing);
+			}
+
+			float f = this.getFaceBrightness(facing);
+			int i = MathHelper.clamp((int)(f * 255.0F), 0, 255);
+			return -16777216 | i << 16 | i << 8 | i;
+		}
+
 		//向きによって明るさを変える
-		private int getFaceBrightness(EnumFacing side) {
+		private int getFaceDefaultBrightness(EnumFacing side) {
 			switch(side) {
 			case DOWN:
 				return 0xFF888888;
@@ -58,12 +75,35 @@ public class SlopeModelEntry {
 				return 0xFFFFFFFF;
 			}
 		}
+
+		private float getFaceBrightness(EnumFacing facing)
+		{
+			switch (facing)
+			{
+				case DOWN:
+					return 0.5F;
+				case UP:
+					return 1.0F;
+				case NORTH:
+				case SOUTH:
+					return 1F;
+				case WEST:
+					return 0.775F;
+				case EAST:
+					return 0.7F;
+				default:
+					return 1.0F;
+			}
+		}
+
 		private int[] vertexToInts(TextureAtlasSprite texture) {
+
+
 			return new int[] {
 					Float.floatToRawIntBits(x),
 					Float.floatToRawIntBits(y),
 					Float.floatToRawIntBits(z),
-					getFaceBrightness(side),
+					getFaceShadeColor(side),
 					Float.floatToRawIntBits(texture.getInterpolatedU(u)),
 					Float.floatToRawIntBits(texture.getInterpolatedV(v)),
 					0
@@ -120,11 +160,13 @@ public class SlopeModelEntry {
 		}
 
 
-		public List<BakedQuad> makeBakedQuad(TextureAtlasSprite... texture) {
+
+		public List<BakedQuad> makeBakedQuad(VertexFormat format, TextureAtlasSprite... texture) {
 
 			List<BakedQuad> ret = new ArrayList<BakedQuad>();
 
 			TextureAtlasSprite side = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/grass_side_overlay");
+
 
 			Iterator<SlopeModelQuad> itr = this.vertex.iterator();
 			int i = 0;
@@ -159,14 +201,14 @@ public class SlopeModelEntry {
 
 				if(texture[i].getIconName().equals("minecraft:blocks/grass_top")) {
 
-					ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), 0, quad.side));
+					ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), 1, quad.side, texture[i], false, format));
 				} else {
 
-					ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), -1, quad.side));
+					ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), -1, quad.side, texture[i], false, format));
 				}
 				if(texture[i].getIconName().equals("minecraft:blocks/grass_side")) {
 
-					ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side), vertex3.vertexToInts(side), vertex4.vertexToInts(side)), 0, quad.side));
+					ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side), vertex3.vertexToInts(side), vertex4.vertexToInts(side)), i, quad.side, texture[i], false, format));
 				}
 			}
 

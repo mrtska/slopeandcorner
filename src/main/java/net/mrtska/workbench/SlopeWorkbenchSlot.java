@@ -39,7 +39,7 @@ public class SlopeWorkbenchSlot extends Slot {
 
 				if(itemstack2 != null || !this.thePlayer.inventory.addItemStackToInventory(itemstack2)) {
 					if(this.inventory.getStackInSlot(0) != null) {
-						this.thePlayer.dropPlayerItemWithRandomChoice(itemstack2, false);
+						this.thePlayer.dropItem(itemstack2, false);
 					}
 				}
 			}

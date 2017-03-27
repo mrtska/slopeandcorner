@@ -1,7 +1,15 @@
 {
+	"forge_marker": 1,
+    "defaults": {
+        "textures": {
+        },
+        "model": "slopeandcorner:slopeworkbench.model"
+     },
     "variants": {
-        "normal": [
-            { "model": "slopeandcorner:slopeworkbench" }
-        ]
+        "normal": [{
+        }],
+        "inventory": [{
+            "transform": "forge:default-block"
+        }]
     }
 }

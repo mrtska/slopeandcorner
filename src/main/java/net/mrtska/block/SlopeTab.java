@@ -45,8 +45,8 @@ public class SlopeTab extends CreativeTabs {
 	/**
 	 * 何に使うのか分かってない とりあえずアイテムを返しておく
 	 */
-	public Item getTabIconItem() {
-		return Item.getItemFromBlock(block);
+	public ItemStack getTabIconItem() {
+		return new ItemStack(block);
 	}
 
 	@Override

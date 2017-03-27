@@ -2,14 +2,16 @@ package net.mrtska.corner;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.mrtska.block.SlopeBlockBase;
@@ -57,7 +59,7 @@ public class CornerBlock extends SlopeBlockBase {
 		//クリエイティブモード以外だったら手持ちアイテムを減らす
 		if(!player.capabilities.isCreativeMode) {
 
-			itemStack.stackSize--;
+			itemStack.shrink(1);
 		}
 
 		//TileEntityからデータを取得
@@ -95,7 +97,7 @@ public class CornerBlock extends SlopeBlockBase {
 
 	@Override
 	//松明などが刺さる方向を指定
-	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 
 		SlopeTileEntity tileEntity = (SlopeTileEntity) world.getTileEntity(pos);
 		String direction = tileEntity.getDirection().split(":")[1];
@@ -150,12 +152,12 @@ public class CornerBlock extends SlopeBlockBase {
 	//上と同じ
 	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
 
-		return this.isSideSolid(world, pos, side);
+		return this.isSideSolid(null, world, pos, side);
 	}
 
 	@Override
 	//当たり判定を設定
-	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB alignedBB, List list, Entity entity) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB alignedBB, List<AxisAlignedBB> list, @Nullable Entity entity, boolean p_185477_7_) {
 
 		SlopeTileEntity tileEntity = (SlopeTileEntity) world.getTileEntity(pos);
 

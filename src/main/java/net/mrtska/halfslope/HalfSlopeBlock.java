@@ -2,15 +2,17 @@ package net.mrtska.halfslope;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.mrtska.block.SlopeBlockBase;
@@ -56,7 +58,7 @@ public class HalfSlopeBlock extends SlopeBlockBase {
 		//クリエイティブモード以外だったら手持ちアイテムを減らす
 		if(!player.capabilities.isCreativeMode) {
 
-			itemStack.stackSize--;
+			itemStack.shrink(1);
 		}
 
 		//TileEntityからデータを取得
@@ -87,7 +89,7 @@ public class HalfSlopeBlock extends SlopeBlockBase {
 
 		if(direction.contains(":R")) {
 
-			int directionInteger = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5F) & 3;
+			int directionInteger = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5F) & 3;
 			String directionString = "HALFSLOPE:";
 
 			switch(directionInteger) {
@@ -126,14 +128,14 @@ public class HalfSlopeBlock extends SlopeBlockBase {
 
 	@Override
 	//松明などが刺さる向きを設定
-	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 
 		return false;
 	}
 
 	@Override
 	//当たり判定を設定
-	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB alignedBB, List list, Entity entity) {
+	public void addCollisionBoxToList(IBlockState state,World world, BlockPos pos, AxisAlignedBB alignedBB, List list, @Nullable Entity entity, boolean p_185477_7_) {
 
 		SlopeTileEntity tileEntity = (SlopeTileEntity) world.getTileEntity(pos);
 

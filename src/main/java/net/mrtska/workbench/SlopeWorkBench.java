@@ -1,19 +1,26 @@
 package net.mrtska.workbench;
 
 import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -35,14 +42,14 @@ public class SlopeWorkBench extends SlopeBlockBase {
 
 	public SlopeWorkBench() {
 
-		this.setCreativeTab(CreativeTabs.tabDecorations);
+		this.setCreativeTab(CreativeTabs.DECORATIONS);
 		this.setHardness(2.5F);
 		this.setUnlocalizedName("slopeworkbench");
 	}
 
 
 	@Override
-	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB alignedBB, List list, Entity entity) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB alignedBB, List list, @Nullable Entity entity, boolean p_185477_7_) {
 
 		SlopeWorkBenchTileEntity tileEntity = (SlopeWorkBenchTileEntity) world.getTileEntity(pos);
 
@@ -78,7 +85,7 @@ public class SlopeWorkBench extends SlopeBlockBase {
 
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 
 		player.openGui(Core.instance, GuiSlopeWorkBench.GuiID, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
@@ -118,18 +125,55 @@ public class SlopeWorkBench extends SlopeBlockBase {
 		return new SlopeWorkBenchTileEntity();
 	}
 
-	@Override
-	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
 
-		Block block = Blocks.crafting_table;
-		effectRenderer.func_180533_a(pos, block.getStateFromMeta(0));
+
+	@Override
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+
+		if(!player.capabilities.isCreativeMode) {
+
+			SlopeWorkBenchTileEntity entity = (SlopeWorkBenchTileEntity) world.getTileEntity(pos);
+
+			float f = 0.7F;
+			double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double d3 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			ItemStack stack = new ItemStack(this, 1, 0);
+			EntityItem item = new EntityItem(world, pos.getX() + d1, pos.getY() + d2, pos.getZ() + d3, stack);
+
+			NBTTagCompound compound = new NBTTagCompound();
+
+			compound.setString("Direction", "SLOPE:SOUTH");
+
+			item.getEntityItem().setTagCompound(compound);
+
+			item.setDefaultPickupDelay();
+
+			player.dropItemAndGetStack(item);
+		}
+	}
+
+	@Override
+	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager effectRenderer) {
+
+		Block block = Blocks.CRAFTING_TABLE;
+		effectRenderer.addBlockDestroyEffects(pos, block.getStateFromMeta(0));
 		return true;
 	}
 
 	@Override
-	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+	public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager effectRenderer) {
 
-		return super.addHitEffects(worldObj, target, effectRenderer);
+		BlockPos pos = target.getBlockPos();
+		SlopeWorkBenchTileEntity tile = (SlopeWorkBenchTileEntity) world.getTileEntity(pos);
+		Random rand = new Random();
+
+		effectRenderer.addBlockHitEffects(pos, target);
+		//nullだった時はパーティクルを出さない
+		if(tile == null) {
+
+			return true;
+		}
+		return true;
 	}
-
 }

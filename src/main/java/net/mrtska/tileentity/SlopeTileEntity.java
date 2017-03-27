@@ -2,8 +2,7 @@ package net.mrtska.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**[Module AbstractTileEntity.java]
@@ -61,19 +60,19 @@ public class SlopeTileEntity extends TileEntity {
 	/**
 	 * パケットを送る
 	 */
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound compound = new NBTTagCompound();
 		this.writeToNBT(compound);
 
-		return new S35PacketUpdateTileEntity(this.pos, 1, compound);
+		return new SPacketUpdateTileEntity(this.pos, 1, compound);
 	}
 
 	@Override
 	/**
 	 * パケットを受け取る
 	 */
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 
 		this.readFromNBT(pkt.getNbtCompound());
 	}
@@ -95,9 +94,11 @@ public class SlopeTileEntity extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		localWriteToNBT(compound);
+
+		return compound;
 	}
 	//座標以外のデータをNBTに書き込む
 	public void localWriteToNBT(NBTTagCompound compound) {

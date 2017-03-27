@@ -2,8 +2,7 @@ package net.mrtska.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**[Module MergedSlopeBlockTileEntity.java]
@@ -28,16 +27,16 @@ public class MergedSlopeTileEntity extends TileEntity {
 
 
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound compound = new NBTTagCompound();
 		writeToNBT(compound);
 
-		return new S35PacketUpdateTileEntity(pos, 1, compound);
+		return new SPacketUpdateTileEntity(pos, 1, compound);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 
 		readFromNBT(pkt.getNbtCompound());
 	}
@@ -58,7 +57,7 @@ public class MergedSlopeTileEntity extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 
 		super.writeToNBT(compound);
 
@@ -71,5 +70,6 @@ public class MergedSlopeTileEntity extends TileEntity {
 		compound.setTag("Top", top);
 		compound.setTag("Bottom", bottom);
 
+		return compound;
 	}
 }

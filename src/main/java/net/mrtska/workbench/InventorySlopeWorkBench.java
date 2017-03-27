@@ -3,7 +3,7 @@ package net.mrtska.workbench;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  [Module InventorySlopeWorkbench.java]
@@ -37,14 +37,14 @@ public class InventorySlopeWorkBench implements IInventory {
 	public ItemStack decrStackSize(int index, int j) {
 		if(item != null) {
 			ItemStack itemstack;
-			if(item.stackSize <= j) {
+			if(item.getCount() <= j) {
 				itemstack = item;
 				item = null;
 				container.onCraftMatrixChanged(this);
 				return itemstack;
 			} else {
 				itemstack = item.splitStack(j);
-				if(item.stackSize == 0) {
+				if(item.getCount() == 0) {
 					item = null;
 				}
 				this.container.onCraftMatrixChanged(this);
@@ -55,10 +55,6 @@ public class InventorySlopeWorkBench implements IInventory {
 		}
 	}
 
-	@Override
-	public ItemStack getStackInSlotOnClosing(int index) {
-		return null;
-	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
@@ -79,7 +75,7 @@ public class InventorySlopeWorkBench implements IInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
@@ -105,7 +101,7 @@ public class InventorySlopeWorkBench implements IInventory {
 
 
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 
 		return null;
 	}
@@ -143,5 +139,19 @@ public class InventorySlopeWorkBench implements IInventory {
 	@Override
 	public void clear() {
 	}
+
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+
+		return null;
+	}
+
+
+	@Override
+	public boolean isEmpty() {
+		return false;
+	}
+
 
 }

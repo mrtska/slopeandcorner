@@ -7,10 +7,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier;
 import net.mrtska.util.SlopeEntry;
 import net.mrtska.workbench.gui.SlopeRecipeGuideButton;
 
@@ -76,7 +76,7 @@ public class ContainerSlopeWorkBench extends Container {
 		if(!this.world.isRemote) {
 
 			if(inventory.getStackInSlot(0) != null) {
-				playerIn.dropPlayerItemWithRandomChoice(inventory.getStackInSlot(0), false);
+				playerIn.dropItem(inventory.getStackInSlot(0), false);
 			}
 		}
 	}
@@ -97,8 +97,8 @@ public class ContainerSlopeWorkBench extends Container {
 
 			return;
 		}
-		UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(block);
-		SlopeEntry entry = SlopeEntry.getSlopeEntry(identifier.name);
+		ResourceLocation identifier = GameRegistry.findRegistry(Block.class).getKey(block);
+		SlopeEntry entry = SlopeEntry.getSlopeEntry(identifier);
 		if(entry == null) {
 			result.setInventorySlotContents(0, null);
 			return;
@@ -112,7 +112,9 @@ public class ContainerSlopeWorkBench extends Container {
 				actTexture = texture;
 			}
 		}
-		ItemStack target = ItemStack.copyItemStack(SlopeRecipeGuideButton.getDrawedItemStack(this.drawIndex));
+
+		ItemStack target = SlopeRecipeGuideButton.getDrawedItemStack(this.drawIndex).copy();
+
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setString("BlockString", identifier.toString());
 		compound.setString("Direction", SlopeRecipeGuideButton.getDrawedItemStack(this.drawIndex).getTagCompound().getString("Direction"));

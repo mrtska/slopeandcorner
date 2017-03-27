@@ -30,13 +30,25 @@ public class SlopeModelLoader implements ICustomModelLoader {
 	@Override
 	//よく分からん
 	public void onResourceManagerReload(IResourceManager resourceManager) {
+
 	}
 
 	@Override
 	//ドメインがmodidと一致したら
 	public boolean accepts(ResourceLocation modelLocation) {
 
-		return modelLocation.getResourceDomain().equals(Core.modid);
+
+		if(!modelLocation.getResourceDomain().equals(Core.modid)) {
+
+			return false;
+		}
+
+		if(modelLocation.getResourcePath().endsWith(".model")) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -45,48 +57,46 @@ public class SlopeModelLoader implements ICustomModelLoader {
 
 		String s = modelLocation.getResourcePath();
 
-		if(s.endsWith("/cornerblock")) {
+		if(s.endsWith("/cornerblock.model")) {
 
 			return CornerModel.instance;
 		}
 
-		if(s.endsWith("/mergecornerblock")) {
+		if(s.endsWith("/mergecornerblock.model")) {
 
 			return MergedCornerModel.instance;
 		}
 
-		if(s.endsWith("/slopeblock")) {
+		if(s.endsWith("/slopeblock.model")) {
 
 			return SlopeModel.instance;
 		}
 
-		if(s.endsWith("/mergeslopeblock")) {
+		if(s.endsWith("/mergeslopeblock.model")) {
 
 			return MergedSlopeModel.instance;
 		}
 
-		if(s.endsWith("/edgecornerblock")) {
+		if(s.endsWith("/edgecornerblock.model")) {
 
 			return EdgeCornerModel.instance;
 		}
 
-		if(s.endsWith("/halfslopeblock")) {
+		if(s.endsWith("/halfslopeblock.model")) {
 
 			return HalfSlopeModel.instance;
 		}
 
-		if(s.endsWith("/slopeworkbench")) {
+		if(s.endsWith("/slopeworkbench.model")) {
 
 			return SlopeModel.instance;
 		}
 
-		if(s.endsWith("/doublemergedhalfslopeblock")) {
+		if(s.endsWith("/doublemergedhalfslopeblock.model")) {
 
 			return HalfSlopeModel.instance;
 		}
 
-
-		System.out.println(modelLocation.getResourcePath());
 		return HalfSlopeModel.instance;
 	}
 
