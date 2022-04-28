@@ -7,6 +7,7 @@ import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.mrtska.slopeandcorner.slope.SlopeModel;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -17,7 +18,7 @@ public class SlopeModelGeometry implements IModelGeometry<SlopeModelGeometry> {
     @Override
     public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 
-        return new BakedSlopeModel(modelLocation);
+        return new BakedSlopeModel(modelLocation, new SlopeModel());
     }
 
     @Override

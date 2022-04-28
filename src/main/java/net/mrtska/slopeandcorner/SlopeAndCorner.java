@@ -3,13 +3,11 @@ package net.mrtska.slopeandcorner;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -77,7 +75,7 @@ public class SlopeAndCorner {
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
 
-            event.getRegistry().registerAll(new SlopeItem(slopeBlock, new SlopeCreativeModeTab()));
+            event.getRegistry().registerAll(new SlopeItem(slopeBlock, new SlopeCreativeModeTab(slopeBlock)));
         }
 
     }

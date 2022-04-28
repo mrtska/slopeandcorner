@@ -1,48 +1,103 @@
 package net.mrtska.slopeandcorner.model;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Transformation;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
-import net.mrtska.slopeandcorner.slope.SlopeModel;
+import net.minecraftforge.common.model.TransformationHelper;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Baked model for slope blocks.
+ */
 public class BakedSlopeModel implements BakedModel {
 
-    private ResourceLocation modelLocation;
+    private final ResourceLocation modelLocation;
 
-    private SlopeModelBase modelBase;
+    private final SlopeModelBase modelBase;
 
-    public BakedSlopeModel(ResourceLocation modelLocation) {
+    private List<BakedQuad> vertexData = new ArrayList<>();
+
+    public BakedSlopeModel(ResourceLocation modelLocation, @Nonnull SlopeModelBase modelBase) {
 
         this.modelLocation = modelLocation;
-        this.modelBase = new SlopeModel();
+        this.modelBase = modelBase;
         this.modelBase.init();
     }
 
+    /**
+     * Returns slope model vertex data.
+     *
+     * @return A model instance.
+     */
+    public @Nonnull SlopeModelBase getModel() {
+
+        return this.modelBase;
+    }
+
+    /**
+     * Set model information as item rendering.
+     *
+     * @param directions List of directions.
+     * @param textures List of textures.
+     */
+    public void setModel(String[] directions, String[] textures) {
+
+        this.vertexData = this.modelBase.getVertex(directions, textures);
+    }
+
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+    public @Nonnull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+
+        // Ignore it when side is specified.
+        if (side != null) {
+
+            return Collections.emptyList();
+        }
+
+        // Returns fixed vertex data when block state is null (e.g. item rendering)
+        if (state == null) {
+
+            return this.vertexData;
+        }
+
+        this.vertexData = this.modelBase.getVertex(new String[] { "SLOPE:NORTH" }, new String[] { "spruce_planks" });
+        return this.vertexData;
+    }
+    @Override
+    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
 
         if (side != null) {
 
             return Collections.emptyList();
         }
 
-        return this.modelBase.getVertex(new String[] { "SLOPE:NORTH" }, new String[] { "spruce_planks" });
-    }
-    @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState p_119123_, @Nullable Direction p_119124_, Random p_119125_) {
-        return null;
+        // Returns fixed vertex data when block state is null (e.g. item rendering)
+        if (state == null) {
+
+            return this.vertexData;
+        }
+
+        this.vertexData = this.modelBase.getVertex(new String[] { "SLOPE:NORTH" }, new String[] { "spruce_planks" });
+        return this.vertexData;
     }
 
     @Override
@@ -62,16 +117,55 @@ public class BakedSlopeModel implements BakedModel {
 
     @Override
     public boolean isCustomRenderer() {
+        return false;
+    }
+
+    @Override
+    public boolean doesHandlePerspectives() {
         return true;
     }
 
     @Override
-    public @NotNull TextureAtlasSprite getParticleIcon() {
+    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack poseStack) {
+
+        Transformation tr = Transformation.identity();
+
+        // Rotate and scale the models.
+        switch (cameraTransformType) {
+            case GUI -> {
+                poseStack.translate(0, 0, 0);
+                poseStack.scale(0.625F, 0.625F, 0.625F);
+                poseStack.mulPose(TransformationHelper.quatFromXYZ(new Vector3f(30, 225, 0), true));
+            }
+            case FIRST_PERSON_RIGHT_HAND -> {
+                poseStack.translate(0, 0, 0);
+                poseStack.scale(0.4F, 0.4F, 0.4F);
+                poseStack.mulPose(TransformationHelper.quatFromXYZ(new Vector3f(0, 45, 0), true));
+            }
+            case FIRST_PERSON_LEFT_HAND -> {
+                poseStack.translate(0, 0, 0);
+                poseStack.scale(0.4F, 0.4F, 0.4F);
+                poseStack.mulPose(TransformationHelper.quatFromXYZ(new Vector3f(0, 225, 0), true));
+            }
+            case THIRD_PERSON_RIGHT_HAND, THIRD_PERSON_LEFT_HAND -> {
+                poseStack.translate(0, 0, 0);
+                poseStack.scale(0.375F, 0.375F, 0.375F);
+                poseStack.mulPose(TransformationHelper.quatFromXYZ(new Vector3f(75, 45, 0), true));
+            }
+        }
+
+        tr.push(poseStack);
+
+        return this;
+    }
+
+    @Override
+    public @Nonnull TextureAtlasSprite getParticleIcon() {
         return SlopeModelBase.getTextureAtlasSprite("spruce_planks");
     }
 
     @Override
-    public @NotNull ItemOverrides getOverrides() {
-        return ItemOverrides.EMPTY;
+    public @Nonnull ItemOverrides getOverrides() {
+        return new SlopeItemOverrides();
     }
 }
