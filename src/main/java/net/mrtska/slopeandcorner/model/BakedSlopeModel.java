@@ -1,7 +1,5 @@
 package net.mrtska.slopeandcorner.model;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
 import com.mojang.math.Vector3f;
@@ -10,12 +8,12 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.TransformationHelper;
+import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -79,7 +77,15 @@ public class BakedSlopeModel implements BakedModel {
             return this.vertexData;
         }
 
-        this.vertexData = this.modelBase.getVertex(new String[] { "SLOPE:NORTH" }, new String[] { "spruce_planks" });
+        if (extraData instanceof SlopeBlockEntity entity) {
+
+            this.vertexData = this.modelBase.getVertex(new String[] { entity.getDirection() }, new String[] { entity.getTexture() });
+        } else {
+
+            this.vertexData = this.modelBase.getVertex(new String[] { "SLOPE:NORTH" }, new String[] { "spruce_planks" });
+        }
+
+
         return this.vertexData;
     }
     @Override
@@ -161,7 +167,17 @@ public class BakedSlopeModel implements BakedModel {
 
     @Override
     public @Nonnull TextureAtlasSprite getParticleIcon() {
-        return SlopeModelBase.getTextureAtlasSprite("spruce_planks");
+        return SlopeModelBase.getTextureAtlasSprite("missingno");
+    }
+
+    @Override
+    public TextureAtlasSprite getParticleIcon(@NotNull IModelData data) {
+
+        if (data instanceof SlopeBlockEntity entity) {
+
+            return SlopeModelBase.getTextureAtlasSprite(entity.getTexture());
+        }
+        return SlopeModelBase.getTextureAtlasSprite("missingno");
     }
 
     @Override

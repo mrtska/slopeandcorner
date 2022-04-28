@@ -3,6 +3,7 @@ package net.mrtska.slopeandcorner;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mrtska.slopeandcorner.block.SlopeCreativeModeTab;
 import net.mrtska.slopeandcorner.model.SlopeModelLoader;
 import net.mrtska.slopeandcorner.slope.SlopeBlock;
+import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
 import net.mrtska.slopeandcorner.slope.SlopeItem;
 
 
@@ -60,11 +62,16 @@ public class SlopeAndCorner {
     private void processIMC(final InterModProcessEvent event) {
     }
 
+    public static class BlockEntityTypes {
+
+        public static BlockEntityType<?> slopeBlock;
+
+    }
+
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
-
 
             slopeBlock = new SlopeBlock();
 
@@ -77,6 +84,12 @@ public class SlopeAndCorner {
 
             event.getRegistry().registerAll(new SlopeItem(slopeBlock, new SlopeCreativeModeTab(slopeBlock)));
         }
+        @SubscribeEvent
+        public static void onBlockEntityTypeRegistry(final RegistryEvent.Register<BlockEntityType<?>> event) {
 
+            BlockEntityTypes.slopeBlock = BlockEntityType.Builder.of(SlopeBlockEntity::new, slopeBlock).build(null).setRegistryName(MODID, "slopeblock");
+            // Register a block entity types.
+            event.getRegistry().register(BlockEntityTypes.slopeBlock);
+        }
     }
 }
