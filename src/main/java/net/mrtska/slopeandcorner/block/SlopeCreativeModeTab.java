@@ -24,7 +24,7 @@ public class SlopeCreativeModeTab extends CreativeModeTab {
     public @NotNull ItemStack makeIcon() {
 
         CompoundTag tag = new CompoundTag();
-        tag.putString("Direction", "SLOPE:SOUTH");
+        tag.putString("Direction", "SOUTH");
         tag.putString("Texture", "spruce_planks");
 
         ItemStack stack = new ItemStack(block);

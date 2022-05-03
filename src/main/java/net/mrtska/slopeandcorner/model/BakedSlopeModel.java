@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.TransformationHelper;
 import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,7 +51,7 @@ public class BakedSlopeModel implements BakedModel {
     }
 
     /**
-     * Set model information as item rendering.
+     * Set model information for item rendering.
      *
      * @param directions List of directions.
      * @param textures List of textures.
@@ -82,14 +81,14 @@ public class BakedSlopeModel implements BakedModel {
             this.vertexData = this.modelBase.getVertex(new String[] { entity.getDirection() }, new String[] { entity.getTexture() });
         } else {
 
-            this.vertexData = this.modelBase.getVertex(new String[] { "SLOPE:NORTH" }, new String[] { "spruce_planks" });
+            this.vertexData = this.modelBase.getVertex(new String[] { "NORTH" }, new String[] { "spruce_planks" });
         }
 
 
         return this.vertexData;
     }
     @Override
-    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
+    public @Nonnull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
 
         if (side != null) {
 
@@ -102,7 +101,7 @@ public class BakedSlopeModel implements BakedModel {
             return this.vertexData;
         }
 
-        this.vertexData = this.modelBase.getVertex(new String[] { "SLOPE:NORTH" }, new String[] { "spruce_planks" });
+        this.vertexData = this.modelBase.getVertex(new String[] { "NORTH" }, new String[] { "spruce_planks" });
         return this.vertexData;
     }
 
@@ -118,7 +117,7 @@ public class BakedSlopeModel implements BakedModel {
 
     @Override
     public boolean usesBlockLight() {
-        return false;
+        return true;
     }
 
     @Override
@@ -158,6 +157,11 @@ public class BakedSlopeModel implements BakedModel {
                 poseStack.scale(0.375F, 0.375F, 0.375F);
                 poseStack.mulPose(TransformationHelper.quatFromXYZ(new Vector3f(75, 45, 0), true));
             }
+            case GROUND -> {
+                poseStack.translate(0, 0, 0);
+                poseStack.scale(0.25F, 0.25F, 0.25F);
+                poseStack.mulPose(TransformationHelper.quatFromXYZ(new Vector3f(0, 0, 0), true));
+            }
         }
 
         tr.push(poseStack);
@@ -171,7 +175,7 @@ public class BakedSlopeModel implements BakedModel {
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@NotNull IModelData data) {
+    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data) {
 
         if (data instanceof SlopeBlockEntity entity) {
 

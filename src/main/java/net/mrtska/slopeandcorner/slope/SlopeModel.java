@@ -10,8 +10,6 @@ import net.mrtska.slopeandcorner.model.SlopeModelEntry.SlopeModelBlock;
 @OnlyIn(Dist.CLIENT)
 public class SlopeModel extends SlopeModelBase {
 
-    public static final SlopeModel instance = new SlopeModel();
-
     @Override
     public void init() {
 
@@ -21,7 +19,7 @@ public class SlopeModel extends SlopeModelBase {
         north.add(EAST, make(1, 1, 0, 16, 0, 1, 0, 1, 0, 16, 1, 0, 0, 16, 16, 1, 1, 0, 16, 0, EAST));
         north.add(SOUTH, make(0, 1, 0, 0, 0, 0, 0, 1, 0, 16, 1, 0, 1, 16, 16, 1, 1, 0, 16, 0, SOUTH));
         north.add(WEST, make(0, 1, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 1, 16, 16, 0, 1, 0, 16, 0, WEST));
-        vertex.put("SLOPE:NORTH", north);
+        vertex.put("NORTH", north);
 
         SlopeModelBlock east = new SlopeModelBlock();
         east.add(DOWN, make(0, 0, 1, 0, 0, 0, 0, 0, 0, 16, 1, 0, 0, 16, 16, 1, 0, 1, 16, 0, DOWN));
@@ -29,7 +27,7 @@ public class SlopeModel extends SlopeModelBase {
         east.add(EAST, make(1, 1, 1, 0, 0, 1, 0, 1, 0, 16, 1, 0, 0, 16, 16, 1, 1, 0, 16, 0, EAST));
         east.add(SOUTH, make(1, 1, 1, 16, 0, 0, 0, 1, 0, 16, 1, 0, 1, 16, 16, 1, 1, 1, 16, 0, SOUTH));
         east.add(WEST, make(1, 1, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 1, 16, 16, 1, 1, 1, 16, 0, WEST));
-        vertex.put("SLOPE:EAST", east);
+        vertex.put("EAST", east);
 
         SlopeModelBlock south = new SlopeModelBlock();
         south.add(DOWN, make(0, 0, 1, 0, 0, 0, 0, 0, 0, 16, 1, 0, 0, 16, 16, 1, 0, 1, 16, 0, DOWN))	;
@@ -37,7 +35,7 @@ public class SlopeModel extends SlopeModelBase {
         south.add(EAST, make(1, 1, 1, 0, 0, 1, 0, 1, 0, 16, 1, 0, 0, 16, 16, 1, 1, 1, 16, 0, EAST));
         south.add(SOUTH, make(0, 1, 1, 0, 0, 0, 0, 1, 0, 16, 1, 0, 1, 16, 16, 1, 1, 1, 16, 0, SOUTH));
         south.add(WEST, make(0, 1, 1, 16, 0, 0, 0, 0, 0, 16, 0, 0, 1, 16, 16, 0, 1, 1, 16, 0, WEST));
-        vertex.put("SLOPE:SOUTH", south);
+        vertex.put("SOUTH", south);
 
         SlopeModelBlock west = new SlopeModelBlock();
         west.add(DOWN, make(0, 0, 1, 0, 0, 0, 0, 0, 0, 16, 1, 0, 0, 16, 16, 1, 0, 1, 16, 0, DOWN));
@@ -45,7 +43,7 @@ public class SlopeModel extends SlopeModelBase {
         west.add(EAST, make(0, 1, 1, 0, 0, 1, 0, 1, 0, 16, 1, 0, 0, 16, 16, 0, 1, 0, 16, 0, EAST));
         west.add(SOUTH, make(0, 1, 1, 0, 0, 0, 0, 1, 0, 16, 1, 0, 1, 16, 16, 0, 1, 1, 16, 0, SOUTH));
         west.add(WEST, make(0, 1, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 1, 16, 16, 0, 1, 1, 16, 0, WEST));
-        vertex.put("SLOPE:WEST", west);
+        vertex.put("WEST", west);
 
         SlopeModelBlock rnorth = new SlopeModelBlock();
         rnorth.add(UP, make(0, 1, 0, 0, 0, 0, 1, 1, 0, 16, 1, 1, 1, 16, 16, 1, 1, 0, 16, 0, UP));
@@ -53,7 +51,7 @@ public class SlopeModel extends SlopeModelBase {
         rnorth.add(EAST, make(1, 1, 1, 0, 0, 1, 0, 0, 0, 16, 1, 0, 0, 16, 16, 1, 1, 0, 16, 0, EAST));
         rnorth.add(SOUTH, make(0, 1, 1, 0, 0, 0, 0, 0, 0, 16, 1, 0, 0, 16, 16, 1, 1, 1, 16, 0, SOUTH));
         rnorth.add(WEST, make(0, 1, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 16, 0, 1, 1, 16, 0, WEST));
-        vertex.put("SLOPE:RNORTH", rnorth);
+        vertex.put("RNORTH", rnorth);
 
         SlopeModelBlock reast = new SlopeModelBlock();
         reast.add(UP, make(0, 1, 0, 0, 0, 0, 1, 1, 0, 16, 1, 1, 1, 16, 16, 1, 1, 0, 16, 0, UP));
@@ -61,7 +59,7 @@ public class SlopeModel extends SlopeModelBase {
         reast.add(EAST, make(1, 1, 1, 0, 0, 1, 0, 1, 0, 16, 1, 0, 0, 16, 16, 1, 1, 0, 16, 0, EAST));
         reast.add(SOUTH, make(0, 1, 1, 0, 0, 1, 0, 1, 0, 16, 1, 0, 1, 16, 16, 1, 1, 1, 16, 0, SOUTH));
         reast.add(EAST, make(0, 1, 0, 0, 0, 1, 0, 0, 0, 16, 1, 0, 1, 16, 16, 0, 1, 1, 16, 0, EAST));
-        vertex.put("SLOPE:REAST", reast);
+        vertex.put("REAST", reast);
 
         SlopeModelBlock rsouth = new SlopeModelBlock();
         rsouth.add(UP, make(0, 1, 0, 0, 0, 0, 1, 1, 0, 16, 1, 1, 1, 16, 16, 1, 1, 0, 16, 0, UP));
@@ -69,7 +67,7 @@ public class SlopeModel extends SlopeModelBase {
         rsouth.add(EAST, make(1, 1, 1, 0, 0, 1, 0, 1, 0, 16, 1, 0, 1, 0, 16, 1, 1, 0, 16, 0, EAST));
         rsouth.add(SOUTH, make(0, 1, 1, 0, 0, 0, 0, 1, 0, 16, 1, 0, 1, 16, 16, 1, 1, 1, 16, 0, SOUTH));
         rsouth.add(WEST, make(0, 1, 0, 0, 0, 0, 0, 1, 0, 16, 0, 0, 1, 16, 16, 0, 1, 1, 16, 0, WEST));
-        vertex.put("SLOPE:RSOUTH", rsouth);
+        vertex.put("RSOUTH", rsouth);
 
         SlopeModelBlock rwest = new SlopeModelBlock();
         rwest.add(UP, make(0, 1, 0, 0, 0, 0, 1, 1, 0, 16, 1, 1, 1, 16, 16, 1, 1, 0, 16, 0, UP));
@@ -77,7 +75,7 @@ public class SlopeModel extends SlopeModelBase {
         rwest.add(EAST, make(1, 1, 1, 0, 0, 0, 0, 1, 0, 16, 0, 0, 0, 16, 16, 1, 1, 0, 16, 0, EAST));
         rwest.add(SOUTH, make(0, 1, 1, 0, 0, 0, 0, 1, 0, 16, 0, 0, 1, 0, 16, 1, 1, 1, 16, 0, SOUTH));
         rwest.add(WEST, make(0, 1, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 1, 16, 16, 0, 1, 1, 16, 0, WEST));
-        vertex.put("SLOPE:RWEST", rwest);
+        vertex.put("RWEST", rwest);
 
         SlopeModelBlock north2 = new SlopeModelBlock();
         north2.add(DOWN, make(1, 0, 1, 16, 0, 0, 0, 0, 0, 16, 1, 0, 0, 16, 16, 1, 0, 1, 16, 0, DOWN));
@@ -85,7 +83,7 @@ public class SlopeModel extends SlopeModelBase {
         north2.add(NORTH, make(1, 1, 0, 0, 0, 1, 0, 0, 0, 16, 0, 0, 0, 16, 16, 0, 1, 0, 16, 0, NORTH));
         north2.add(EAST, make(1, 1, 1, 0, 0, 1, 0, 1, 0, 16, 1, 0, 0, 16, 16, 1, 1, 0, 16, 0, EAST));
         north2.add(SOUTH, make(0, 1, 0, 0, 0, 0, 0, 0, 0, 16, 1, 0, 1, 16, 16, 1, 1, 1, 16, 0, SOUTH));
-        vertex.put("SLOPE:NORTH2", north2);
+        vertex.put("NORTH2", north2);
 
         SlopeModelBlock east2 = new SlopeModelBlock();
         east2.add(DOWN, make(0, 0, 1, 0, 0, 1, 0, 0, 0, 16, 1, 0, 0, 16, 16, 1, 0, 1, 16, 0, DOWN));
@@ -93,7 +91,7 @@ public class SlopeModel extends SlopeModelBase {
         east2.add(NORTH, make(1, 1, 0, 0, 0, 1, 0, 0, 0, 16, 0, 0, 1, 16, 16, 0, 1, 1, 16, 0, NORTH));
         east2.add(EAST, make(1, 1, 1, 0, 0, 1, 0, 1, 0, 16, 1, 0, 0, 16, 16, 1, 1, 0, 16, 0, EAST));
         east2.add(SOUTH, make(0, 1, 1, 0, 0, 0, 0, 1, 0, 16, 1, 0, 1, 16, 16, 1, 1, 1, 16, 0, SOUTH));
-        vertex.put("SLOPE:EAST2", east2);
+        vertex.put("EAST2", east2);
 
         SlopeModelBlock south2 = new SlopeModelBlock();
         south2.add(DOWN, make(0, 0, 1, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 16, 1, 0, 1, 16, 0, DOWN));
@@ -101,7 +99,7 @@ public class SlopeModel extends SlopeModelBase {
         south2.add(NORTH, make(1, 1, 1, 0, 0, 1, 0, 1, 0, 16, 0, 0, 0, 16, 16, 0, 1, 0, 16, 0, NORTH));
         south2.add(SOUTH, make(0, 1, 1, 0, 0, 0, 0, 1, 0, 16, 1, 0, 1, 16, 16, 1, 1, 1, 16, 0, SOUTH));
         south2.add(WEST, make(0, 1, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 1, 16, 16, 0, 1, 1, 16, 0, WEST));
-        vertex.put("SLOPE:SOUTH2", south2);
+        vertex.put("SOUTH2", south2);
 
         SlopeModelBlock west2 = new SlopeModelBlock();
         west2.add(DOWN, make(0, 0, 1, 0, 0, 0, 0, 0, 0, 16, 1, 0, 0, 16, 16, 0, 0, 1, 16, 0, DOWN));
@@ -109,6 +107,6 @@ public class SlopeModel extends SlopeModelBase {
         west2.add(NORTH, make(1, 1, 0, 0, 0, 1, 0, 0, 0, 16, 0, 0, 0, 16, 16, 0, 1, 0, 16, 0, NORTH));
         west2.add(SOUTH, make(0, 1, 1, 0, 0, 0, 0, 1, 0, 16, 1, 0, 0, 16, 16, 1, 1, 0, 16, 0, SOUTH));
         west2.add(WEST, make(0, 1, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 1, 16, 16, 0, 1, 1, 16, 0, WEST));
-        vertex.put("SLOPE:WEST2", west2);
+        vertex.put("WEST2", west2);
     }
 }

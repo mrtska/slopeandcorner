@@ -32,7 +32,7 @@ public class SlopeItem extends SlopeItemBase {
 
             {
                 CompoundTag tag = new CompoundTag();
-                tag.putString("Direction", "SLOPE:SOUTH");
+                tag.putString("Direction", "SOUTH");
                 tag.putString("Texture", entry.getTexturesName()[0]);
 
                 ItemStack stack = new ItemStack(this);
@@ -42,7 +42,7 @@ public class SlopeItem extends SlopeItemBase {
             }
             {
                 CompoundTag tag = new CompoundTag();
-                tag.putString("Direction", "SLOPE:RSOUTH");
+                tag.putString("Direction", "RSOUTH");
                 tag.putString("Texture", entry.getTexturesName()[0]);
 
                 ItemStack stack = new ItemStack(this);
