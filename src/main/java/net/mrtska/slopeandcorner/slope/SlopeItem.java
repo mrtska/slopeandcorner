@@ -38,7 +38,7 @@ public class SlopeItem extends SlopeItemBase {
                 CompoundTag tag = new CompoundTag();
                 tag.putString("BlockName", entry.getBlockName());
                 tag.putString("BlockType", "SOUTH");
-                tag.putString("Texture", entry.getTexturesName()[0]);
+                tag.putString("Texture", entry.getTexture());
 
                 ItemStack stack = new ItemStack(this);
                 stack.setTag(tag);
@@ -49,7 +49,7 @@ public class SlopeItem extends SlopeItemBase {
                 CompoundTag tag = new CompoundTag();
                 tag.putString("BlockName", entry.getBlockName());
                 tag.putString("BlockType", "RSOUTH");
-                tag.putString("Texture", entry.getTexturesName()[0]);
+                tag.putString("Texture", entry.getTexture());
 
                 ItemStack stack = new ItemStack(this);
                 stack.setTag(tag);
@@ -60,7 +60,7 @@ public class SlopeItem extends SlopeItemBase {
                 CompoundTag tag = new CompoundTag();
                 tag.putString("BlockName", entry.getBlockName());
                 tag.putString("BlockType", "SOUTH2");
-                tag.putString("Texture", entry.getTexturesName()[0]);
+                tag.putString("Texture", entry.getTexture());
 
                 ItemStack stack = new ItemStack(this);
                 stack.setTag(tag);

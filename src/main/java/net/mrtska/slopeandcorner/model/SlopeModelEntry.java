@@ -145,7 +145,6 @@ public class SlopeModelEntry {
 
             List<BakedQuad> ret = new ArrayList<>();
 
-            TextureAtlasSprite side = SlopeModelBase.getTextureAtlasSprite("grass_block_side_overlay");
 
             Iterator<SlopeModelQuad> itr = this.vertex.iterator();
             int i = 0;
@@ -178,16 +177,17 @@ public class SlopeModelEntry {
                 SlopeModelVertex vertex3 = quad.vertex.get(2);
                 SlopeModelVertex vertex4 = quad.vertex.get(3);
 
-                if(texture[i].getName().toString().equals("minecraft:blocks/grass_top")) {
+                if(texture[i].getName().toString().equals("minecraft:block/grass_block_top")) {
 
                     ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), 1, quad.side, texture[i], false));
                 } else {
 
-                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), 1, quad.side, texture[i], false));
+                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), -1, quad.side, texture[i], false));
                 }
-                if(texture[i].getName().toString().equals("minecraft:blocks/grass_side")) {
+                if(texture[i].getName().toString().equals("minecraft:block/grass_block_side")) {
 
-                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side), vertex3.vertexToInts(side), vertex4.vertexToInts(side)), i, quad.side, texture[i], false));
+                    var side = SlopeModelBase.getTextureAtlasSprite("grass_block_side_overlay");
+                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side), vertex3.vertexToInts(side), vertex4.vertexToInts(side)), 1, quad.side, texture[i], false));
                 }
             }
 

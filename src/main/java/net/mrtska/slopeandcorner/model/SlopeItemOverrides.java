@@ -27,8 +27,7 @@ public class SlopeItemOverrides extends ItemOverrides {
 
         if (originalModel instanceof BakedSlopeModel slopeModel) {
 
-            slopeModel.setModel(new String[]{ tag.getString("BlockType") }, new String[]{ tag.getString("Texture") });
-            return slopeModel;
+            slopeModel.setModel(tag.getString("BlockType"), tag.getString("Texture"));
         }
 
         return originalModel;

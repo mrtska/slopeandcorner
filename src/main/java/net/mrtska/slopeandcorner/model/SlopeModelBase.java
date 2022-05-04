@@ -5,12 +5,11 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.mrtska.slopeandcorner.model.SlopeModelEntry.SlopeModelBlock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import net.mrtska.slopeandcorner.model.SlopeModelEntry.SlopeModelBlock;
 
 public abstract class SlopeModelBase {
 
@@ -25,70 +24,71 @@ public abstract class SlopeModelBase {
 
 
     //頂点データを返す テクスチャUV込み
-    public List<BakedQuad> getVertex(String[] directions, String[] textureStrings) {
+    public List<BakedQuad> getVertex(String blockType, String texture) {
 
         List<BakedQuad> ret = new ArrayList<>();
 
-        for(int i = 0; i < directions.length; i++) {
+        TextureAtlasSprite textureDown = null;
+        TextureAtlasSprite textureUp = null;
+        TextureAtlasSprite textureNorth = null;
+        TextureAtlasSprite textureEast = null;
+        TextureAtlasSprite textureSouth = null;
+        TextureAtlasSprite textureWest = null;
 
-            String direction = directions[i];
-            String textureString = textureStrings[i];
+        if (!texture.contains(",")) {
 
-            if(direction == null || textureString == null) {
+            textureDown = getTextureAtlasSprite(texture);
+            textureUp = textureDown;
+            textureNorth = textureDown;
+            textureEast = textureDown;
+            textureSouth = textureDown;
+            textureWest = textureDown;
+        } else {
 
-                continue;
+            var faces = texture.split(",");
+
+            for (var face : faces) {
+
+                var tmp = face.split("=");
+                var side = tmp[0];
+                var sideTexture = tmp[1];
+
+                switch (side) {
+                    case "up" -> textureUp = getTextureAtlasSprite(sideTexture);
+                    case "down" -> textureDown = getTextureAtlasSprite(sideTexture);
+                    case "north" -> textureNorth = getTextureAtlasSprite(sideTexture);
+                    case "east" -> textureEast = getTextureAtlasSprite(sideTexture);
+                    case "south" -> textureSouth = getTextureAtlasSprite(sideTexture);
+                    case "west" -> textureWest = getTextureAtlasSprite(sideTexture);
+                    case "side" -> {
+                        textureNorth = getTextureAtlasSprite(sideTexture);
+                        textureEast = textureNorth;
+                        textureSouth = textureNorth;
+                        textureWest = textureNorth;
+                    }
+                }
             }
-
-
-
-            TextureAtlasSprite texture_down = getTextureAtlasSprite(textureString);
-            TextureAtlasSprite texture_up = texture_down;
-            TextureAtlasSprite texture_north = texture_down;
-            TextureAtlasSprite texture_east = texture_down;
-            TextureAtlasSprite texture_south = texture_down;
-            TextureAtlasSprite texture_west = texture_down;
-
-//            if(textureString.contains(",")) {
-//
-//                TextureAtlasSprite[] textures = getTextureAtlasSprites(textureString);
-//                texture_down = textures[0];
-//                texture_up = textures[1];
-//                texture_north = textures[2];
-//                texture_east = textures[3];
-//                texture_south = textures[4];
-//                texture_west = textures[5];
-//            }
-//            if(texture_down == null) {
-//
-//                texture_down = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
-//                texture_up = texture_down;
-//                texture_north = texture_down;
-//                texture_east = texture_down;
-//                texture_south = texture_down;
-//                texture_west = texture_down;
-//            }
-
-
-            HashMap<String, SlopeModelBlock> map;
-
-            if(false) {
-
-                vertex.clear();
-                init();
-                map = vertex;
-            } else {
-
-                map = vertex;
-            }
-
-            SlopeModelBlock model = map.get(direction);
-            if(model == null) {
-
-                return ret;
-            }
-
-            ret.addAll(model.makeBakedQuad(texture_down, texture_up, texture_north, texture_east, texture_south, texture_west));
         }
+
+        HashMap<String, SlopeModelBlock> map;
+
+        if(false) {
+
+            vertex.clear();
+            init();
+            map = vertex;
+        } else {
+
+            map = vertex;
+        }
+
+        SlopeModelBlock model = map.get(blockType);
+        if(model == null) {
+
+            return ret;
+        }
+
+        ret.addAll(model.makeBakedQuad(textureDown, textureUp, textureNorth, textureEast, textureSouth, textureWest));
         return ret;
     }
 

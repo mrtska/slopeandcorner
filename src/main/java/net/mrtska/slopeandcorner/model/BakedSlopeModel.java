@@ -1,11 +1,8 @@
 package net.mrtska.slopeandcorner.model;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
 import com.mojang.math.Vector3f;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -14,11 +11,9 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.TransformationHelper;
-import net.mrtska.slopeandcorner.SlopeAndCorner;
-import net.mrtska.slopeandcorner.slope.SlopeBlock;
+import net.mrtska.slopeandcorner.SlopeEntry;
 import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
 import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 
@@ -60,12 +55,12 @@ public class BakedSlopeModel implements BakedModel {
     /**
      * Set model information for item rendering.
      *
-     * @param blockTypes List of directions.
-     * @param textures List of textures.
+     * @param blockType List of directions.
+     * @param texture List of textures.
      */
-    public void setModel(String[] blockTypes, String[] textures) {
+    public void setModel(String blockType, String texture) {
 
-        this.vertexData = this.modelBase.getVertex(blockTypes, textures);
+        this.vertexData = this.modelBase.getVertex(blockType, texture);
     }
 
     @Override
@@ -87,10 +82,11 @@ public class BakedSlopeModel implements BakedModel {
 
             var texture = entity.getTexture();
 
-            this.vertexData = this.modelBase.getVertex(new String[] { state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase() }, new String[] { texture });
+
+            this.vertexData = this.modelBase.getVertex(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase(), texture);
         } else {
 
-            this.vertexData = this.modelBase.getVertex(new String[] { "NORTH" }, new String[] { "spruce_planks" });
+            this.vertexData = this.modelBase.getVertex("NORTH", "spruce_planks");
         }
 
 
@@ -109,7 +105,7 @@ public class BakedSlopeModel implements BakedModel {
             return this.vertexData;
         }
 
-        this.vertexData = this.modelBase.getVertex(new String[] { "NORTH" }, new String[] { "spruce_planks" });
+        this.vertexData = this.modelBase.getVertex("NORTH","spruce_planks");
         return this.vertexData;
     }
 
@@ -187,7 +183,7 @@ public class BakedSlopeModel implements BakedModel {
 
         if (data instanceof SlopeBlockEntity entity) {
 
-            return SlopeModelBase.getTextureAtlasSprite(entity.getTexture());
+            return SlopeModelBase.getTextureAtlasSprite(SlopeEntry.getSlopeEntry(entity.getBlockName()).getParticle());
         }
         return SlopeModelBase.getTextureAtlasSprite("missingno");
     }

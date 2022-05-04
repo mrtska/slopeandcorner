@@ -3,8 +3,8 @@ package net.mrtska.slopeandcorner;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -12,51 +12,67 @@ import java.util.Objects;
  */
 public class SlopeEntry {
 
-    private static final ArrayList<SlopeEntry> entries;
+    private static final LinkedHashMap<String, SlopeEntry> entries;
 
 
     private final Block block;
     private final String blockName;
-    private final String[] textureName;
+    private final String texture;
+    private final String particle;
 
-    private SlopeEntry(Block block, String blockName, String... textures) {
+    private SlopeEntry(Block block, String blockName, String texture, String particle) {
 
         this.block = block;
         this.blockName = blockName;
-        this.textureName = textures;
+        this.texture = texture;
+        this.particle = particle;
     }
 
     public Block getBlock() {
-        return block;
+        return this.block;
     }
 
     public String getBlockName() {
-        return blockName;
+        return this.blockName;
     }
 
-    public String[] getTexturesName() {
-        return textureName;
+    public String getTexture() {
+        return this.texture;
     }
 
-
-
-    private static void register(Block targetBlock, String... textures) {
-
-        entries.add(new SlopeEntry(targetBlock, Objects.requireNonNull(targetBlock.getRegistryName()).getPath(), textures));
+    public String getParticle() {
+        return this.particle;
     }
+
+    private static void register(Block targetBlock, String texture) {
+
+        var key = Objects.requireNonNull(targetBlock.getRegistryName()).getPath();
+        entries.put(key, new SlopeEntry(targetBlock, key, texture, texture));
+    }
+
+    private static void register(Block targetBlock, String texture, String particle) {
+
+        var key = Objects.requireNonNull(targetBlock.getRegistryName()).getPath();
+        entries.put(key, new SlopeEntry(targetBlock, key, texture, particle));
+    }
+
 
     /**
      * Returns all slope entries.
      */
-    public static List<SlopeEntry> getSlopeBlocks() {
+    public static Collection<SlopeEntry> getSlopeBlocks() {
 
-        return entries;
+        return entries.values();
     }
 
+    public static SlopeEntry getSlopeEntry(String key) {
+
+        return entries.get(key);
+    }
 
     static {
 
-        entries = new ArrayList<>();
+        entries = new LinkedHashMap<>();
 
         // Register vanilla blocks.
         register(Blocks.STONE, "stone");
@@ -73,7 +89,7 @@ public class SlopeEntry {
         register(Blocks.TUFF, "tuff");
         register(Blocks.DRIPSTONE_BLOCK, "dripstone_block");
 
-        register(Blocks.GRASS_BLOCK, "grass");
+        register(Blocks.GRASS_BLOCK, "up=grass_block_top,down=dirt,side=grass_block_side", "dirt");
 
         register(Blocks.DIRT, "dirt");
         register(Blocks.COARSE_DIRT, "coarse_dirt");
