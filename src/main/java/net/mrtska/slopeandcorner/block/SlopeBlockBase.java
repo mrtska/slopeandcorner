@@ -1,10 +1,12 @@
 package net.mrtska.slopeandcorner.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,9 +18,9 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
 import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
@@ -27,7 +29,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 public abstract class SlopeBlockBase extends Block implements EntityBlock, SimpleWaterloggedBlock {
 
     public SlopeBlockBase() {
-        super(Properties.of(Material.GLASS));
+        super(Properties.of(Material.STONE));
     }
 
     @OverridingMethodsMustInvokeSuper
@@ -46,6 +48,16 @@ public abstract class SlopeBlockBase extends Block implements EntityBlock, Simpl
 
     public @Nonnull FluidState getFluidState(BlockState state) {
         return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public @Nonnull BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction direction, @Nonnull BlockState state2, @Nonnull LevelAccessor level, @Nonnull BlockPos pos, @Nonnull BlockPos pos2) {
+
+        if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+
+        return super.updateShape(state, direction, state2, level, pos, pos2);
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -55,87 +56,89 @@ public class SlopeBlock extends SlopeBlockBase {
         visualShapeMap.put(SlopeType.south2, Shapes.or(south, west));
         visualShapeMap.put(SlopeType.west2, Shapes.or(west, north));
 
-        var shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        var smoothStep = 0.25F;
 
-            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0.0D, 16.0D, i, 16.0D - i));
+        var shape = Shapes.empty();
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
+
+            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0.0D, 16.0D, i, 16.0D + smoothStep - i));
         }
         collisionShapeMap.put(SlopeType.north, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(i, 0.0D, 0.0D, 16.0D, i, 16.0D));
+            shape = Shapes.or(shape, Block.box(i - smoothStep, 0.0D, 0.0D, 16.0D, i, 16.0D));
         }
         collisionShapeMap.put(SlopeType.east, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, i, 16.0D, i, 16.0D));
+            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, i - smoothStep, 16.0D, i, 16.0D));
         }
         collisionShapeMap.put(SlopeType.south, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0.0D, 16.0D - i, i, 16.0D));
+            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0.0D, 16.0D + smoothStep - i, i, 16.0D));
         }
         collisionShapeMap.put(SlopeType.west, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, 0.0D, 16.0D, 16.0D, 16.0D - i));
+            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, 0.0D, 16.0D, 16.0D, 16.0D + smoothStep - i));
         }
         collisionShapeMap.put(SlopeType.rnorth, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(i, 16.0D - i, 0.0D, 16.0D, 16.0D, 16.0D));
+            shape = Shapes.or(shape, Block.box(i - smoothStep, 16.0D - i, 0.0D, 16.0D, 16.0D, 16.0D));
         }
         collisionShapeMap.put(SlopeType.reast, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, i, 16.0D, 16.0D, 16.0D));
+            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, i - smoothStep, 16.0D, 16.0D, 16.0D));
         }
         collisionShapeMap.put(SlopeType.rsouth, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, 0.0D, 16.0D - i, 16.0D, 16.0D));
+            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, 0.0D, 16.0D + smoothStep - i, 16.0D, 16.0D));
         }
         collisionShapeMap.put(SlopeType.rwest, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(i, 0.0D, 0.0D, 16.0D, 16.0D, i));
+            shape = Shapes.or(shape, Block.box(i - smoothStep, 0.0D, 0.0D, 16.0D, 16.0D, i));
         }
         collisionShapeMap.put(SlopeType.north2, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(i, 0.0D, 16.0D - i, 16.0D, 16.0D, 16.0D));
+            shape = Shapes.or(shape, Block.box(i - smoothStep, 0.0D, 16.0D - i, 16.0D, 16.0D, 16.0D));
         }
         collisionShapeMap.put(SlopeType.east2, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, i, i, 16.0D, 16.0D));
+            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, i - smoothStep, i, 16.0D, 16.0D));
         }
         collisionShapeMap.put(SlopeType.south2, shape.optimize());
 
         shape = Shapes.empty();
-        for (float i = 0; i <= 16; i += 0.25) {
+        for (float i = smoothStep; i <= 16; i += smoothStep) {
 
-            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0, i, 16.0D, 16.0D - i));
+            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0.0D, i, 16.0D, 16.0D + smoothStep - i));
         }
         collisionShapeMap.put(SlopeType.west2, shape.optimize());
     }
@@ -156,6 +159,7 @@ public class SlopeBlock extends SlopeBlockBase {
             return state;
         }
 
+        var fluidState = context.getLevel().getFluidState(context.getClickedPos());
         var blockType = tag.getString("BlockType");
         var texture = tag.getString("Texture");
         var type2 = blockType.endsWith("2");
@@ -178,14 +182,16 @@ public class SlopeBlock extends SlopeBlockBase {
             slopeType += "2";
         }
 
-        return state.setValue(SlopeBlockStateProperties.SLOPE_TYPE, SlopeType.valueOf(slopeType.toLowerCase())).setValue(SlopeBlockStateProperties.TRANSPARENT, texture.contains("glass"));
+        return state.setValue(SlopeBlockStateProperties.SLOPE_TYPE, SlopeType.valueOf(slopeType.toLowerCase()))
+                .setValue(SlopeBlockStateProperties.TRANSPARENT, texture.contains("glass"))
+                .setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
 
     }
 
     @Override
     public @Nonnull VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
 
-        SlopeType type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
+        var type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
         if (collisionShapeMap.containsKey(type)) {
 
             return collisionShapeMap.get(type);
@@ -198,7 +204,7 @@ public class SlopeBlock extends SlopeBlockBase {
     @Override
     public @Nonnull VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
 
-        SlopeType type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
+        var type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
         if (visualShapeMap.containsKey(type)) {
 
             return visualShapeMap.get(type);
@@ -215,7 +221,7 @@ public class SlopeBlock extends SlopeBlockBase {
             return Shapes.empty();
         }
 
-        SlopeType type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
+        var type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
         if (visualShapeMap.containsKey(type)) {
             return visualShapeMap.get(type);
         }
