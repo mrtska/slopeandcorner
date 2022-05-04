@@ -1,10 +1,13 @@
 package net.mrtska.slopeandcorner.item;
 
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -74,5 +77,20 @@ public abstract class SlopeItemBase extends BlockItem {
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    public @Nonnull String getDescriptionId(ItemStack stack) {
+
+        var tag = stack.getTag();
+        if (tag == null) {
+            return super.getDescriptionId(stack);
+        }
+
+        // Use vanilla block localization.
+        var blockName = tag.getString("BlockName");
+        var block = Registry.BLOCK.get(new ResourceLocation(blockName));
+
+        return block.asItem().getDescriptionId();
     }
 }
