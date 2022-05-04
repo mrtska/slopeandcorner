@@ -29,6 +29,11 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
      */
     private String blockType;
 
+    /**
+     * Original block registry name.
+     */
+    private String blockName;
+
     public SlopeBlockEntity(BlockPos pos, BlockState state) {
         super(SlopeAndCorner.BlockEntityTypes.slopeBlock, pos, state);
     }
@@ -37,6 +42,7 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
     public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
 
+        this.blockName = tag.getString("BlockName");
         this.blockType = tag.getString("BlockType");
         this.texture = tag.getString("Texture");
     }
@@ -45,6 +51,7 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
     protected void saveAdditional(@Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
 
+        tag.putString("BlockName", this.blockName);
         tag.putString("BlockType", this.blockType);
         tag.putString("Texture", this.texture);
     }
@@ -77,6 +84,13 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
         this.texture = texture;
     }
 
+    public String getBlockName() {
+        return blockName;
+    }
+
+    public void setBlockName(String blockName) {
+        this.blockName = blockName;
+    }
     @Nonnull
     @Override
     public IModelData getModelData() {

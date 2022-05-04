@@ -1,19 +1,22 @@
 package net.mrtska.slopeandcorner.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.AbstractGlassBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
+import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -23,8 +26,6 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public abstract class SlopeBlockBase extends AbstractGlassBlock implements EntityBlock, SimpleWaterloggedBlock {
 
-    protected static final BooleanProperty TRANSPARENT = BooleanProperty.create("transparent");
-
     public SlopeBlockBase() {
         super(Properties.of(Material.GLASS));
     }
@@ -32,7 +33,7 @@ public abstract class SlopeBlockBase extends AbstractGlassBlock implements Entit
     @OverridingMethodsMustInvokeSuper
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.WATERLOGGED);
-        builder.add(TRANSPARENT);
+        builder.add(SlopeBlockStateProperties.TRANSPARENT);
     }
 
     public boolean useShapeForLightOcclusion(@Nonnull BlockState state) {
@@ -45,5 +46,20 @@ public abstract class SlopeBlockBase extends AbstractGlassBlock implements Entit
 
     public @Nonnull FluidState getFluidState(BlockState state) {
         return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity) {
+
+        if (level.getBlockEntity(pos) instanceof SlopeBlockEntity blockEntity) {
+
+            var blockName = blockEntity.getBlockName();
+
+            var block = Registry.BLOCK.get(new ResourceLocation(blockName));
+
+            return block.getSoundType(block.defaultBlockState(), level, BlockPos.ZERO, entity);
+        }
+
+        return super.getSoundType(state, level, pos, entity);
     }
 }

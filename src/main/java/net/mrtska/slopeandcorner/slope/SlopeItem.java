@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.mrtska.slopeandcorner.SlopeAndCorner;
 import net.mrtska.slopeandcorner.SlopeEntry;
 import net.mrtska.slopeandcorner.item.SlopeItemBase;
+import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 
 import javax.annotation.Nonnull;
 
@@ -35,6 +36,7 @@ public class SlopeItem extends SlopeItemBase {
 
             {
                 CompoundTag tag = new CompoundTag();
+                tag.putString("BlockName", entry.getBlockName());
                 tag.putString("BlockType", "SOUTH");
                 tag.putString("Texture", entry.getTexturesName()[0]);
 
@@ -45,6 +47,7 @@ public class SlopeItem extends SlopeItemBase {
             }
             {
                 CompoundTag tag = new CompoundTag();
+                tag.putString("BlockName", entry.getBlockName());
                 tag.putString("BlockType", "RSOUTH");
                 tag.putString("Texture", entry.getTexturesName()[0]);
 
@@ -55,6 +58,7 @@ public class SlopeItem extends SlopeItemBase {
             }
             {
                 CompoundTag tag = new CompoundTag();
+                tag.putString("BlockName", entry.getBlockName());
                 tag.putString("BlockType", "SOUTH2");
                 tag.putString("Texture", entry.getTexturesName()[0]);
 
@@ -70,7 +74,8 @@ public class SlopeItem extends SlopeItemBase {
     @Override
     protected void fillBlockEntity(@Nonnull SlopeBlockEntity entity, @Nonnull BlockState state, @Nonnull Player player, @Nonnull CompoundTag tag) {
 
+        entity.setBlockName(tag.getString("BlockName"));
         entity.setTexture(tag.getString("Texture"));
-        entity.setBlockType(state.getValue(SlopeBlock.SLOPE_TYPE).getSerializedName().toUpperCase());
+        entity.setBlockType(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase());
     }
 }

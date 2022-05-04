@@ -15,20 +15,22 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.mrtska.slopeandcorner.SlopeAndCorner;
 import net.mrtska.slopeandcorner.block.SlopeBlockBase;
+import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 
+
 public class SlopeBlock extends SlopeBlockBase {
 
-    public static final EnumProperty<SlopeType> SLOPE_TYPE = EnumProperty.create("type", SlopeType.class);
     private static final HashMap<SlopeType, VoxelShape> collisionShapeMap = new HashMap<>();
     private static final HashMap<SlopeType, VoxelShape> visualShapeMap = new HashMap<>();
 
     public SlopeBlock() {
         this.setRegistryName(SlopeAndCorner.MODID, "slopeblock");
-        this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE).setValue(TRANSPARENT, false).setValue(SLOPE_TYPE, SlopeType.north));
+        this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE)
+                .setValue(SlopeBlockStateProperties.TRANSPARENT, false).setValue(SlopeBlockStateProperties.SLOPE_TYPE, SlopeType.north));
     }
 
 
@@ -73,7 +75,7 @@ public class SlopeBlock extends SlopeBlockBase {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(SLOPE_TYPE);
+        builder.add(SlopeBlockStateProperties.SLOPE_TYPE);
     }
 
     @Override
@@ -106,14 +108,14 @@ public class SlopeBlock extends SlopeBlockBase {
             direction += "2";
         }
 
-        return state.setValue(SLOPE_TYPE, SlopeType.valueOf(direction.toLowerCase())).setValue(TRANSPARENT, texture.contains("glass"));
+        return state.setValue(SlopeBlockStateProperties.SLOPE_TYPE, SlopeType.valueOf(direction.toLowerCase())).setValue(SlopeBlockStateProperties.TRANSPARENT, texture.contains("glass"));
 
     }
 
     @Override
     public @Nonnull VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
 
-        SlopeType type = state.getValue(SLOPE_TYPE);
+        SlopeType type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
         if (collisionShapeMap.containsKey(type)) {
 
             return collisionShapeMap.get(type);
@@ -142,7 +144,7 @@ public class SlopeBlock extends SlopeBlockBase {
     @Override
     public @Nonnull VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
 
-        SlopeType type = state.getValue(SLOPE_TYPE);
+        SlopeType type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
         if (visualShapeMap.containsKey(type)) {
 
             return visualShapeMap.get(type);
@@ -156,11 +158,11 @@ public class SlopeBlock extends SlopeBlockBase {
     @Override
     public @Nonnull VoxelShape getOcclusionShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos) {
 
-        if (state.getValue(TRANSPARENT)) {
+        if (state.getValue(SlopeBlockStateProperties.TRANSPARENT)) {
             return Shapes.empty();
         }
 
-        SlopeType type = state.getValue(SLOPE_TYPE);
+        SlopeType type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
         if (visualShapeMap.containsKey(type)) {
             return visualShapeMap.get(type);
         }
