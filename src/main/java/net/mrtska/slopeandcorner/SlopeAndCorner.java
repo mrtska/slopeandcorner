@@ -1,5 +1,7 @@
 package net.mrtska.slopeandcorner;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -54,6 +56,9 @@ public class SlopeAndCorner {
     private void doClientStuff(ModelRegistryEvent event) {
 
         ModelLoaderRegistry.registerLoader(new ResourceLocation(MODID, "slope"), new SlopeModelLoader());
+
+
+        ItemBlockRenderTypes.setRenderLayer(slopeBlock, RenderType.cutoutMipped());
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

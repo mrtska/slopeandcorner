@@ -1,14 +1,11 @@
 package net.mrtska.slopeandcorner.item;
 
-import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,6 +19,15 @@ public abstract class SlopeItemBase extends BlockItem {
     public SlopeItemBase(Block block, Properties properties) {
         super(block, properties);
     }
+
+    /**
+     * Fill block entity information from compound tag and state.
+     * @param entity target block entity.
+     * @param state block state.
+     * @param player player who placed block.
+     * @param tag NBT from held item stack.
+     */
+    protected abstract void fillBlockEntity(@Nonnull SlopeBlockEntity entity, @Nonnull BlockState state, @Nonnull Player player, @Nonnull CompoundTag tag);
 
     @Override
     public @Nonnull InteractionResult place(BlockPlaceContext blockPlaceContext) {
@@ -51,30 +57,19 @@ public abstract class SlopeItemBase extends BlockItem {
         if (level.getBlockEntity(pos) instanceof SlopeBlockEntity entity) {
 
             var tag = stack.getTag();
-            if (tag == null) {
+            if (tag == null || player == null) {
                 return InteractionResult.FAIL;
             }
 
-            var a = ((int)Mth.wrapDegrees((player.getYRot() + 180F) * 4F / 360F + 0.5F)) & 3;
-
-            var direction = "";
-
-            switch (a) {
-                case 0 -> direction += "NORTH";
-                case 1 -> direction += "EAST";
-                case 2 -> direction += "SOUTH";
-                case 3 -> direction += "WEST";
-            }
-
-            entity.setTexture(tag.getString("Texture"));
-            entity.setDirection(direction);
+            this.fillBlockEntity(entity, blockstate, player, tag);
+        } else {
+            return InteractionResult.FAIL;
         }
-
 
         level.gameEvent(player, GameEvent.BLOCK_PLACE, pos);
         SoundType soundtype = state.getSoundType(level, pos, player);
         level.playSound(player, pos, this.getPlaceSound(state, level, pos, player), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-        if (player == null || !player.getAbilities().instabuild) {
+        if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
 

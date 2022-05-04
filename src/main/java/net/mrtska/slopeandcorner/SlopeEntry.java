@@ -62,5 +62,8 @@ public class SlopeEntry {
         register(Blocks.STONE, "stone");
         register(Blocks.GRANITE, "granite");
 
+
+        register(Blocks.GLASS, "glass");
+
     }
 }

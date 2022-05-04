@@ -1,8 +1,10 @@
 package net.mrtska.slopeandcorner.model;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -13,6 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.TransformationHelper;
+import net.mrtska.slopeandcorner.SlopeAndCorner;
+import net.mrtska.slopeandcorner.slope.SlopeBlock;
 import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
 
 import javax.annotation.Nonnull;
@@ -53,12 +57,12 @@ public class BakedSlopeModel implements BakedModel {
     /**
      * Set model information for item rendering.
      *
-     * @param directions List of directions.
+     * @param blockTypes List of directions.
      * @param textures List of textures.
      */
-    public void setModel(String[] directions, String[] textures) {
+    public void setModel(String[] blockTypes, String[] textures) {
 
-        this.vertexData = this.modelBase.getVertex(directions, textures);
+        this.vertexData = this.modelBase.getVertex(blockTypes, textures);
     }
 
     @Override
@@ -78,7 +82,7 @@ public class BakedSlopeModel implements BakedModel {
 
         if (extraData instanceof SlopeBlockEntity entity) {
 
-            this.vertexData = this.modelBase.getVertex(new String[] { entity.getDirection() }, new String[] { entity.getTexture() });
+            this.vertexData = this.modelBase.getVertex(new String[] { entity.getBlockType() }, new String[] { entity.getTexture() });
         } else {
 
             this.vertexData = this.modelBase.getVertex(new String[] { "NORTH" }, new String[] { "spruce_planks" });
@@ -94,7 +98,6 @@ public class BakedSlopeModel implements BakedModel {
 
             return Collections.emptyList();
         }
-
         // Returns fixed vertex data when block state is null (e.g. item rendering)
         if (state == null) {
 
@@ -117,7 +120,7 @@ public class BakedSlopeModel implements BakedModel {
 
     @Override
     public boolean usesBlockLight() {
-        return true;
+        return false;
     }
 
     @Override

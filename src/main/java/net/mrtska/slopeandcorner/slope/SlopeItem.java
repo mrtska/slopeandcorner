@@ -2,12 +2,15 @@ package net.mrtska.slopeandcorner.slope;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.mrtska.slopeandcorner.SlopeAndCorner;
 import net.mrtska.slopeandcorner.SlopeEntry;
 import net.mrtska.slopeandcorner.item.SlopeItemBase;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 /**
  * Slope block item.
@@ -20,7 +23,7 @@ public class SlopeItem extends SlopeItemBase {
     }
 
     @Override
-    public void fillItemCategory(@NotNull CreativeModeTab tab, @NotNull NonNullList<ItemStack> list) {
+    public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> list) {
 
         if (tab != this.getItemCategory()) {
 
@@ -32,7 +35,7 @@ public class SlopeItem extends SlopeItemBase {
 
             {
                 CompoundTag tag = new CompoundTag();
-                tag.putString("Direction", "SOUTH");
+                tag.putString("BlockType", "SOUTH");
                 tag.putString("Texture", entry.getTexturesName()[0]);
 
                 ItemStack stack = new ItemStack(this);
@@ -42,7 +45,17 @@ public class SlopeItem extends SlopeItemBase {
             }
             {
                 CompoundTag tag = new CompoundTag();
-                tag.putString("Direction", "RSOUTH");
+                tag.putString("BlockType", "RSOUTH");
+                tag.putString("Texture", entry.getTexturesName()[0]);
+
+                ItemStack stack = new ItemStack(this);
+                stack.setTag(tag);
+
+                list.add(stack);
+            }
+            {
+                CompoundTag tag = new CompoundTag();
+                tag.putString("BlockType", "SOUTH2");
                 tag.putString("Texture", entry.getTexturesName()[0]);
 
                 ItemStack stack = new ItemStack(this);
@@ -52,5 +65,12 @@ public class SlopeItem extends SlopeItemBase {
             }
         }
 
+    }
+
+    @Override
+    protected void fillBlockEntity(@Nonnull SlopeBlockEntity entity, @Nonnull BlockState state, @Nonnull Player player, @Nonnull CompoundTag tag) {
+
+        entity.setTexture(tag.getString("Texture"));
+        entity.setBlockType(state.getValue(SlopeBlock.SLOPE_TYPE).getSerializedName().toUpperCase());
     }
 }

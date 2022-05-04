@@ -27,7 +27,7 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
     /**
      * Slope block direction.
      */
-    private String direction;
+    private String blockType;
 
     public SlopeBlockEntity(BlockPos pos, BlockState state) {
         super(SlopeAndCorner.BlockEntityTypes.slopeBlock, pos, state);
@@ -37,7 +37,7 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
     public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
 
-        this.direction = tag.getString("Direction");
+        this.blockType = tag.getString("BlockType");
         this.texture = tag.getString("Texture");
     }
 
@@ -45,7 +45,7 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
     protected void saveAdditional(@Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
 
-        tag.putString("Direction", this.direction);
+        tag.putString("BlockType", this.blockType);
         tag.putString("Texture", this.texture);
     }
 
@@ -61,12 +61,12 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
         return this.saveWithoutMetadata();
     }
 
-    public String getDirection() {
-        return direction;
+    public String getBlockType() {
+        return blockType;
     }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
+    public void setBlockType(String blockType) {
+        this.blockType = blockType;
     }
 
     public String getTexture() {
