@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -37,11 +36,24 @@ public class SlopeBlock extends SlopeBlockBase {
     static {
 
         var bottom = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+        var top = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+        var north = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 8.0D);
+        var east = Block.box(8.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+        var south = Block.box(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
+        var west = Block.box(0.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
 
         visualShapeMap.put(SlopeType.north, Shapes.or(bottom, Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D)));
         visualShapeMap.put(SlopeType.east, Shapes.or(bottom, Block.box(8.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D)));
         visualShapeMap.put(SlopeType.south, Shapes.or(bottom, Block.box(0.0D, 8.0D, 8.0D, 16.0D, 16.0D, 16.0D)));
         visualShapeMap.put(SlopeType.west, Shapes.or(bottom, Block.box(0.0D, 8.0D, 0.0D, 8.0D, 16.0D, 16.0D)));
+        visualShapeMap.put(SlopeType.rnorth, Shapes.or(top, Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 8.0D)));
+        visualShapeMap.put(SlopeType.reast, Shapes.or(top, Block.box(8.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D)));
+        visualShapeMap.put(SlopeType.rsouth, Shapes.or(top, Block.box(0.0D, 0.0D, 8.0D, 16.0D, 8.0D, 16.0D)));
+        visualShapeMap.put(SlopeType.rwest, Shapes.or(top, Block.box(0.0D, 0.0D, 0.0D, 8.0D, 8.0D, 16.0D)));
+        visualShapeMap.put(SlopeType.north2, Shapes.or(north, east));
+        visualShapeMap.put(SlopeType.east2, Shapes.or(east, south));
+        visualShapeMap.put(SlopeType.south2, Shapes.or(south, west));
+        visualShapeMap.put(SlopeType.west2, Shapes.or(west, north));
 
         var shape = Shapes.empty();
         for (float i = 0; i <= 16; i += 0.25) {
@@ -70,6 +82,62 @@ public class SlopeBlock extends SlopeBlockBase {
             shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0.0D, 16.0D - i, i, 16.0D));
         }
         collisionShapeMap.put(SlopeType.west, shape.optimize());
+
+        shape = Shapes.empty();
+        for (float i = 0; i <= 16; i += 0.25) {
+
+            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, 0.0D, 16.0D, 16.0D, 16.0D - i));
+        }
+        collisionShapeMap.put(SlopeType.rnorth, shape.optimize());
+
+        shape = Shapes.empty();
+        for (float i = 0; i <= 16; i += 0.25) {
+
+            shape = Shapes.or(shape, Block.box(i, 16.0D - i, 0.0D, 16.0D, 16.0D, 16.0D));
+        }
+        collisionShapeMap.put(SlopeType.reast, shape.optimize());
+
+        shape = Shapes.empty();
+        for (float i = 0; i <= 16; i += 0.25) {
+
+            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, i, 16.0D, 16.0D, 16.0D));
+        }
+        collisionShapeMap.put(SlopeType.rsouth, shape.optimize());
+
+        shape = Shapes.empty();
+        for (float i = 0; i <= 16; i += 0.25) {
+
+            shape = Shapes.or(shape, Block.box(0.0D, 16.0D - i, 0.0D, 16.0D - i, 16.0D, 16.0D));
+        }
+        collisionShapeMap.put(SlopeType.rwest, shape.optimize());
+
+        shape = Shapes.empty();
+        for (float i = 0; i <= 16; i += 0.25) {
+
+            shape = Shapes.or(shape, Block.box(i, 0.0D, 0.0D, 16.0D, 16.0D, i));
+        }
+        collisionShapeMap.put(SlopeType.north2, shape.optimize());
+
+        shape = Shapes.empty();
+        for (float i = 0; i <= 16; i += 0.25) {
+
+            shape = Shapes.or(shape, Block.box(i, 0.0D, 16.0D - i, 16.0D, 16.0D, 16.0D));
+        }
+        collisionShapeMap.put(SlopeType.east2, shape.optimize());
+
+        shape = Shapes.empty();
+        for (float i = 0; i <= 16; i += 0.25) {
+
+            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, i, i, 16.0D, 16.0D));
+        }
+        collisionShapeMap.put(SlopeType.south2, shape.optimize());
+
+        shape = Shapes.empty();
+        for (float i = 0; i <= 16; i += 0.25) {
+
+            shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0, i, 16.0D, 16.0D - i));
+        }
+        collisionShapeMap.put(SlopeType.west2, shape.optimize());
     }
 
     @Override
@@ -82,7 +150,6 @@ public class SlopeBlock extends SlopeBlockBase {
     public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
 
         var state = this.defaultBlockState();
-        var rotationYaw = ((int) Mth.wrapDegrees((context.getPlayer().getYRot() + 180F) * 4F / 360F + 0.5F)) & 3;
         var tag = context.getItemInHand().getTag();
 
         if (tag == null) {
@@ -91,24 +158,27 @@ public class SlopeBlock extends SlopeBlockBase {
 
         var blockType = tag.getString("BlockType");
         var texture = tag.getString("Texture");
-        var direction = "";
+        var type2 = blockType.endsWith("2");
+        var slopeType = "";
 
         if (blockType.startsWith("R")) {
-            direction = "R";
+            slopeType = "R";
         }
+
+        var rotationYaw = ((int) Mth.wrapDegrees((context.getPlayer().getYRot() + 180F) * 4F / 360F + (type2 ? 0.0F : 0.5F))) & 3;
 
         switch (rotationYaw) {
-            case 0 -> direction += "NORTH";
-            case 1 -> direction += "EAST";
-            case 2 -> direction += "SOUTH";
-            case 3 -> direction += "WEST";
+            case 0 -> slopeType += "NORTH";
+            case 1 -> slopeType += "EAST";
+            case 2 -> slopeType += "SOUTH";
+            case 3 -> slopeType += "WEST";
         }
 
-        if (blockType.endsWith("2")) {
-            direction += "2";
+        if (type2) {
+            slopeType += "2";
         }
 
-        return state.setValue(SlopeBlockStateProperties.SLOPE_TYPE, SlopeType.valueOf(direction.toLowerCase())).setValue(SlopeBlockStateProperties.TRANSPARENT, texture.contains("glass"));
+        return state.setValue(SlopeBlockStateProperties.SLOPE_TYPE, SlopeType.valueOf(slopeType.toLowerCase())).setValue(SlopeBlockStateProperties.TRANSPARENT, texture.contains("glass"));
 
     }
 
@@ -119,22 +189,6 @@ public class SlopeBlock extends SlopeBlockBase {
         if (collisionShapeMap.containsKey(type)) {
 
             return collisionShapeMap.get(type);
-        }
-
-        if (getter.getBlockEntity(pos) instanceof SlopeBlockEntity entity) {
-
-            String blockType = entity.getBlockType();
-
-            if (collisionShapeMap.containsKey(blockType)) {
-
-                return visualShapeMap.get(blockType);
-            }
-            var shape = Block.box(0.0D, 0.0D, 0.0D, 0, 0, 0);
-            for (float i = 0; i <= 16; i += 1) {
-
-                shape = Shapes.or(shape, Block.box(0.0D, 0.0D, 0.0D, 16.0D, i, 16.0D - i));
-            }
-            return shape;
         }
 
         return Shapes.empty();
@@ -150,14 +204,13 @@ public class SlopeBlock extends SlopeBlockBase {
             return visualShapeMap.get(type);
         }
 
-        return Shapes.or(Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D)
-                , Block.box(0.0D, 8.0D, 0.0D, 8.0D, 16.0D, 16.0D));
-
+        return Shapes.block();
     }
 
     @Override
     public @Nonnull VoxelShape getOcclusionShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos) {
 
+        // No occlusion when block is transparent.
         if (state.getValue(SlopeBlockStateProperties.TRANSPARENT)) {
             return Shapes.empty();
         }

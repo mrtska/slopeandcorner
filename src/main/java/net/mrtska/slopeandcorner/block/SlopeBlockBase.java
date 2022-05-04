@@ -24,7 +24,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 /**
  * Base class of slope blocks.
  */
-public abstract class SlopeBlockBase extends AbstractGlassBlock implements EntityBlock, SimpleWaterloggedBlock {
+public abstract class SlopeBlockBase extends Block implements EntityBlock, SimpleWaterloggedBlock {
 
     public SlopeBlockBase() {
         super(Properties.of(Material.GLASS));
