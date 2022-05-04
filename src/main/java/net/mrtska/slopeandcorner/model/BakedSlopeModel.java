@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -13,11 +14,13 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.TransformationHelper;
 import net.mrtska.slopeandcorner.SlopeAndCorner;
 import net.mrtska.slopeandcorner.slope.SlopeBlock;
 import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
+import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -82,7 +85,9 @@ public class BakedSlopeModel implements BakedModel {
 
         if (extraData instanceof SlopeBlockEntity entity) {
 
-            this.vertexData = this.modelBase.getVertex(new String[] { entity.getBlockType() }, new String[] { entity.getTexture() });
+            var texture = entity.getTexture();
+
+            this.vertexData = this.modelBase.getVertex(new String[] { state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase() }, new String[] { texture });
         } else {
 
             this.vertexData = this.modelBase.getVertex(new String[] { "NORTH" }, new String[] { "spruce_planks" });

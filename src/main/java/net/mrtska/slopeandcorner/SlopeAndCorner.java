@@ -58,7 +58,7 @@ public class SlopeAndCorner {
         ModelLoaderRegistry.registerLoader(new ResourceLocation(MODID, "slope"), new SlopeModelLoader());
 
 
-        ItemBlockRenderTypes.setRenderLayer(slopeBlock, RenderType.cutoutMipped());
+        ItemBlockRenderTypes.setRenderLayer(slopeBlock, RenderType.translucent());
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
