@@ -28,8 +28,8 @@ public abstract class SlopeModelBase {
 
         List<BakedQuad> ret = new ArrayList<>();
 
-        TextureAtlasSprite textureDown = null;
-        TextureAtlasSprite textureUp = null;
+        TextureAtlasSprite textureBottom = null;
+        TextureAtlasSprite textureTop = null;
         TextureAtlasSprite textureNorth = null;
         TextureAtlasSprite textureEast = null;
         TextureAtlasSprite textureSouth = null;
@@ -37,12 +37,12 @@ public abstract class SlopeModelBase {
 
         if (!texture.contains(",")) {
 
-            textureDown = getTextureAtlasSprite(texture);
-            textureUp = textureDown;
-            textureNorth = textureDown;
-            textureEast = textureDown;
-            textureSouth = textureDown;
-            textureWest = textureDown;
+            textureBottom = getTextureAtlasSprite(texture);
+            textureTop = textureBottom;
+            textureNorth = textureBottom;
+            textureEast = textureBottom;
+            textureSouth = textureBottom;
+            textureWest = textureBottom;
         } else {
 
             var faces = texture.split(",");
@@ -54,8 +54,8 @@ public abstract class SlopeModelBase {
                 var sideTexture = tmp[1];
 
                 switch (side) {
-                    case "up" -> textureUp = getTextureAtlasSprite(sideTexture);
-                    case "down" -> textureDown = getTextureAtlasSprite(sideTexture);
+                    case "top" -> textureTop = getTextureAtlasSprite(sideTexture);
+                    case "bottom" -> textureBottom = getTextureAtlasSprite(sideTexture);
                     case "north" -> textureNorth = getTextureAtlasSprite(sideTexture);
                     case "east" -> textureEast = getTextureAtlasSprite(sideTexture);
                     case "south" -> textureSouth = getTextureAtlasSprite(sideTexture);
@@ -68,6 +68,11 @@ public abstract class SlopeModelBase {
                     }
                 }
             }
+        }
+
+        if (textureTop == null || textureBottom == null || textureNorth == null || textureEast == null || textureSouth == null || textureWest == null) {
+
+            throw new IllegalStateException("Failed to get texture.");
         }
 
         HashMap<String, SlopeModelBlock> map;
@@ -88,7 +93,7 @@ public abstract class SlopeModelBase {
             return ret;
         }
 
-        ret.addAll(model.makeBakedQuad(textureDown, textureUp, textureNorth, textureEast, textureSouth, textureWest));
+        ret.addAll(model.makeBakedQuad(textureBottom, textureTop, textureNorth, textureEast, textureSouth, textureWest));
         return ret;
     }
 
