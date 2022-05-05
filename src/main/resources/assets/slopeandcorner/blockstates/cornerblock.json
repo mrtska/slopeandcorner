@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "": { "model": "slopeandcorner:corner" }
+  },
+  "loader": "slopeandcorner:slope"
+}

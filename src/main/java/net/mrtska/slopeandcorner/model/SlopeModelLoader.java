@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SlopeModelLoader implements IModelLoader<SlopeModelGeometry> {
 
-
     @Override
     public @NotNull SlopeModelGeometry read(@NotNull JsonDeserializationContext deserializationContext, @NotNull JsonObject modelContents) {
         return new SlopeModelGeometry();
@@ -19,6 +18,6 @@ public class SlopeModelLoader implements IModelLoader<SlopeModelGeometry> {
 
     @Override
     public void onResourceManagerReload(@NotNull ResourceManager manager) {
-        // Nothing to do anything even resources is  reloading.
+        // Nothing to do anything even resources is reloading.
     }
 }

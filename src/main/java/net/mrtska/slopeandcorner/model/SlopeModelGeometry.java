@@ -7,6 +7,7 @@ import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.mrtska.slopeandcorner.corner.CornerModel;
 import net.mrtska.slopeandcorner.slope.SlopeModel;
 
 import java.util.Collection;
@@ -18,7 +19,13 @@ public class SlopeModelGeometry implements IModelGeometry<SlopeModelGeometry> {
     @Override
     public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 
-        return new BakedSlopeModel(modelLocation, new SlopeModel());
+        var path = modelLocation.getPath();
+
+        return switch (path) {
+            case "slope", "slopeitem" -> new BakedSlopeModel(modelLocation, new SlopeModel());
+            case "corner", "corneritem" -> new BakedSlopeModel(modelLocation, new CornerModel());
+            default -> throw new IllegalStateException("Could not find baked model for " + path);
+        };
     }
 
     @Override
