@@ -46,6 +46,21 @@ public abstract class SlopeBlockBase extends Block implements EntityBlock, Simpl
         return true;
     }
 
+    @Override
+    public boolean isCollisionShapeFullBlock(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
+        return false;
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    public float getShadeBrightness(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
+        return 1F;
+    }
+
     public boolean isPathfindable(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull PathComputationType type) {
         return false;
     }

@@ -81,9 +81,11 @@ public class BakedSlopeModel implements BakedModel {
         if (extraData instanceof SlopeBlockEntity entity) {
 
             var texture = entity.getTexture();
-
-
-            this.vertexData = this.modelBase.getVertex(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase(), texture);
+            if (texture == null) {
+                this.vertexData = this.modelBase.getVertex("NORTH", "spruce_planks");
+            } else {
+                this.vertexData = this.modelBase.getVertex(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase(), texture);
+            }
         } else {
 
             this.vertexData = this.modelBase.getVertex("NORTH", "spruce_planks");

@@ -212,8 +212,8 @@ public class SlopeBlock extends SlopeBlockBase {
         }
 
         var type = state.getValue(SlopeBlockStateProperties.SLOPE_TYPE);
-        if (visualShapeMap.containsKey(type)) {
-            return visualShapeMap.get(type);
+        if (collisionShapeMap.containsKey(type)) {
+            return collisionShapeMap.get(type);
         }
         return collisionShapeMap.get(SlopeType.north);
     }
