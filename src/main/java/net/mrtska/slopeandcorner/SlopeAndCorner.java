@@ -66,9 +66,12 @@ public class SlopeAndCorner {
 
         // Add grass block overlay coloring.
         var blockColors = Minecraft.getInstance().getBlockColors();
-        blockColors.register((state,level, pos, tintIndex) ->
-                level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.get(0.5D, 1.0D)
-                , slopeBlock);
+        blockColors.register((state,level, pos, tintIndex) -> {
+            if (tintIndex == 0) {
+                return -1;
+            }
+            return level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.get(0.5D, 1.0D);
+        }, slopeBlock);
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) ->
                 blockColors.getColor(Blocks.GRASS.defaultBlockState(), null, null, tintIndex), slopeBlock);
     }
