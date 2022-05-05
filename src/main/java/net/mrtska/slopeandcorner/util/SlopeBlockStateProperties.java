@@ -2,7 +2,6 @@ package net.mrtska.slopeandcorner.util;
 
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.mrtska.slopeandcorner.slope.SlopeType;
 
 /**
  * Block state properties for slope blocks.

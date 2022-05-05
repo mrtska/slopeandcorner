@@ -23,7 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mrtska.slopeandcorner.block.SlopeCreativeModeTab;
 import net.mrtska.slopeandcorner.model.SlopeModelLoader;
 import net.mrtska.slopeandcorner.slope.SlopeBlock;
-import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
+import net.mrtska.slopeandcorner.block.SlopeBlockEntity;
 import net.mrtska.slopeandcorner.slope.SlopeItem;
 
 
@@ -39,16 +39,12 @@ public class SlopeAndCorner {
 
 
     public SlopeAndCorner() {
-        // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
 
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -63,7 +59,6 @@ public class SlopeAndCorner {
 
         // Set rendering layer as translucent.
         ItemBlockRenderTypes.setRenderLayer(slopeBlock, RenderType.translucent());
-
         // Add grass block overlay coloring.
         var blockColors = Minecraft.getInstance().getBlockColors();
         blockColors.register((state,level, pos, tintIndex) -> {

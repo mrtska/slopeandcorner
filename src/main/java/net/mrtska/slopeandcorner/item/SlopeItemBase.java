@@ -13,7 +13,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
+import net.mrtska.slopeandcorner.block.SlopeBlockEntity;
+import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +31,12 @@ public abstract class SlopeItemBase extends BlockItem {
      * @param player player who placed block.
      * @param tag NBT from held item stack.
      */
-    protected abstract void fillBlockEntity(@Nonnull SlopeBlockEntity entity, @Nonnull BlockState state, @Nonnull Player player, @Nonnull CompoundTag tag);
+    protected void fillBlockEntity(@Nonnull SlopeBlockEntity entity, @Nonnull BlockState state, @Nonnull Player player, @Nonnull CompoundTag tag) {
+
+        entity.setBlockName(tag.getString("BlockName"));
+        entity.setTexture(tag.getString("Texture"));
+        entity.setBlockType(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase());
+    }
 
     @Override
     public @Nonnull InteractionResult place(BlockPlaceContext blockPlaceContext) {

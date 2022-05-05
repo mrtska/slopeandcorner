@@ -9,6 +9,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -16,7 +17,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
 import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 
 import javax.annotation.Nonnull;
@@ -36,6 +36,7 @@ public abstract class SlopeBlockBase extends Block implements EntityBlock, Simpl
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.WATERLOGGED);
         builder.add(SlopeBlockStateProperties.TRANSPARENT);
+        builder.add(SlopeBlockStateProperties.SLOPE_TYPE);
     }
 
     public boolean useShapeForLightOcclusion(@Nonnull BlockState state) {
@@ -73,5 +74,11 @@ public abstract class SlopeBlockBase extends Block implements EntityBlock, Simpl
         }
 
         return super.getSoundType(state, level, pos, entity);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+        return new SlopeBlockEntity(pos, state);
     }
 }

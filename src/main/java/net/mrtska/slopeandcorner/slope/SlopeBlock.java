@@ -5,9 +5,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -16,9 +14,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.mrtska.slopeandcorner.SlopeAndCorner;
 import net.mrtska.slopeandcorner.block.SlopeBlockBase;
 import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
+import net.mrtska.slopeandcorner.util.SlopeType;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 
 
@@ -144,12 +142,6 @@ public class SlopeBlock extends SlopeBlockBase {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(SlopeBlockStateProperties.SLOPE_TYPE);
-    }
-
-    @Override
     public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
 
         var state = this.defaultBlockState();
@@ -226,11 +218,5 @@ public class SlopeBlock extends SlopeBlockBase {
             return visualShapeMap.get(type);
         }
         return collisionShapeMap.get(SlopeType.north);
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
-        return new SlopeBlockEntity(pos, state);
     }
 }

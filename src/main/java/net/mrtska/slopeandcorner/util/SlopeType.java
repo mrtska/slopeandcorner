@@ -1,4 +1,4 @@
-package net.mrtska.slopeandcorner.slope;
+package net.mrtska.slopeandcorner.util;
 
 import net.minecraft.util.StringRepresentable;
 
@@ -31,7 +31,15 @@ public enum SlopeType implements StringRepresentable {
 
     south2("south2"),
 
-    west2("west2");
+    west2("west2"),
+
+    rnorth2("rnorth2"),
+
+    reast2("reast2"),
+
+    rsouth2("rsouth2"),
+
+    rwest2("rwest2");
 
     private final String name;
 

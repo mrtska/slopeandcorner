@@ -8,22 +8,20 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 public class SlopeModelEntry {
 
-    //斜面ブロックのモデルデータを管理するクラス
-
     public static class SlopeModelVertex {
 
-        //座標 向き
         public float x;
         public float y;
         public float z;
         public float u;
         public float v;
-        private Direction side;
+        private final Direction side;
 
         private SlopeModelVertex(float x, float y, float z, float u, float v, Direction side) {
 
@@ -41,43 +39,24 @@ public class SlopeModelEntry {
             return -16777216 | i << 16 | i << 8 | i;
         }
 
-
-        //向きによって明るさを変える
         private int getFaceDefaultBrightness(Direction side) {
-            switch(side) {
-                case DOWN:
-                    return 0xFF888888;
-                case UP:
-                    return 0xFFFFFFFF;
-                case NORTH:
-                case SOUTH:
-                    return 0xFFCCCCCC;
-                case EAST:
-                case WEST:
-                    return 0xFF999999;
-                default:
-                    return 0xFFFFFFFF;
-            }
+            return switch (side) {
+                case DOWN -> 0xFF888888;
+                case UP -> 0xFFFFFFFF;
+                case NORTH, SOUTH -> 0xFFCCCCCC;
+                case EAST, WEST -> 0xFF999999;
+            };
         }
         private float getFaceBrightness(Direction facing) {
-            switch(facing) {
-                case DOWN:
-                    return 0.5F;
-                case UP:
-                    return 1.0F;
-                case NORTH:
-                case SOUTH:
-                    return 0.8F;
-                case WEST:
-                case EAST:
-                    return 0.6F;
-                default:
-                    return 1.0F;
-            }
+            return switch (facing) {
+                case DOWN -> 0.5F;
+                case UP -> 1.0F;
+                case NORTH, SOUTH -> 0.8F;
+                case WEST, EAST -> 0.6F;
+            };
         }
 
         private int[] vertexToInts(TextureAtlasSprite texture) {
-
 
             return new int[] {
                     Float.floatToRawIntBits(x),
@@ -89,22 +68,19 @@ public class SlopeModelEntry {
                     0, 0
             };
         }
-
     }
 
     public static class SlopeModelQuad {
 
         //頂点データ 面ごとに管理する
-        private ArrayList<SlopeModelVertex> vertex = new ArrayList<SlopeModelVertex>();
+        private final ArrayList<SlopeModelVertex> vertex = new ArrayList<>();
         private Direction side;
 
 
         private SlopeModelQuad(SlopeModelVertex[] vertex, Direction side) {
 
-            for(SlopeModelVertex ver : vertex) {
-
-                this.vertex.add(ver);
-            }
+            Collections.addAll(this.vertex, vertex);
+            this.side = side;
         }
 
         public static SlopeModelQuad make(float x1, float y1, float z1, float u1, float v1,
@@ -125,21 +101,18 @@ public class SlopeModelEntry {
 
     public static class SlopeModelBlock {
 
-        private ArrayList<SlopeModelQuad> vertex;
+        private final ArrayList<SlopeModelQuad> vertex;
 
         public SlopeModelBlock() {
 
             this.vertex = new ArrayList<SlopeModelQuad>();
         }
 
-
         public void add(Direction side, SlopeModelQuad quad) {
 
             quad.side = side;
             vertex.add(quad);
         }
-
-
 
         public List<BakedQuad> makeBakedQuad(TextureAtlasSprite... texture) {
 
@@ -151,26 +124,14 @@ public class SlopeModelEntry {
             while(itr.hasNext()) {
 
                 SlopeModelQuad quad = itr.next();
-                switch(quad.side) {
-                    case DOWN:
-                        i = 0;
-                        break;
-                    case UP:
-                        i = 1;
-                        break;
-                    case NORTH:
-                        i = 2;
-                        break;
-                    case EAST:
-                        i = 3;
-                        break;
-                    case SOUTH:
-                        i = 4;
-                        break;
-                    case WEST:
-                        i = 5;
-                        break;
-                }
+                i = switch (quad.side) {
+                    case DOWN -> 0;
+                    case UP -> 1;
+                    case NORTH -> 2;
+                    case EAST -> 3;
+                    case SOUTH -> 4;
+                    case WEST -> 5;
+                };
 
                 SlopeModelVertex vertex1 = quad.vertex.get(0);
                 SlopeModelVertex vertex2 = quad.vertex.get(1);
@@ -190,9 +151,7 @@ public class SlopeModelEntry {
                     ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side), vertex3.vertexToInts(side), vertex4.vertexToInts(side)), 1, quad.side, texture[i], false));
                 }
             }
-
             return ret;
         }
     }
-
 }

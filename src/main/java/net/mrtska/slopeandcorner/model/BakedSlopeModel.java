@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.TransformationHelper;
 import net.mrtska.slopeandcorner.SlopeEntry;
-import net.mrtska.slopeandcorner.slope.SlopeBlockEntity;
+import net.mrtska.slopeandcorner.block.SlopeBlockEntity;
 import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 
 import javax.annotation.Nonnull;

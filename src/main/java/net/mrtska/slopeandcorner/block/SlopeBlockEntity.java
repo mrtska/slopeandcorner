@@ -1,4 +1,4 @@
-package net.mrtska.slopeandcorner.slope;
+package net.mrtska.slopeandcorner.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
