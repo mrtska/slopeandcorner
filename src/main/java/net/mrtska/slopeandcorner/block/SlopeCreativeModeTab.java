@@ -15,8 +15,8 @@ public class SlopeCreativeModeTab extends CreativeModeTab {
 
     private final Block block;
 
-    public SlopeCreativeModeTab(Block block) {
-        super("slope");
+    public SlopeCreativeModeTab(Block block, String label) {
+        super(label);
         this.block = block;
     }
 

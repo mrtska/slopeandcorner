@@ -27,8 +27,6 @@ public class SlopeBlock extends SlopeBlockBase {
 
     public SlopeBlock() {
         this.setRegistryName(SlopeAndCorner.MODID, "slopeblock");
-        this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE)
-                .setValue(SlopeBlockStateProperties.TRANSPARENT, false).setValue(SlopeBlockStateProperties.SLOPE_TYPE, SlopeType.north));
     }
 
 

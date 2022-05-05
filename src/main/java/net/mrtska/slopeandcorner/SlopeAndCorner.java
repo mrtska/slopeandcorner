@@ -103,8 +103,8 @@ public class SlopeAndCorner {
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
 
-            event.getRegistry().register(new SlopeItem(slopeBlock, new SlopeCreativeModeTab(slopeBlock)));
-            event.getRegistry().register(new CornerItem(cornerBlock, new SlopeCreativeModeTab(cornerBlock)));
+            event.getRegistry().register(new SlopeItem(slopeBlock, new SlopeCreativeModeTab(slopeBlock, "slope")));
+            event.getRegistry().register(new CornerItem(cornerBlock, new SlopeCreativeModeTab(cornerBlock, "corner")));
         }
         @SubscribeEvent
         public static void onBlockEntityTypeRegistry(final RegistryEvent.Register<BlockEntityType<?>> event) {

@@ -18,6 +18,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
+import net.mrtska.slopeandcorner.util.SlopeType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,6 +31,8 @@ public abstract class SlopeBlockBase extends Block implements EntityBlock, Simpl
 
     public SlopeBlockBase() {
         super(Properties.of(Material.STONE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, Boolean.FALSE)
+                .setValue(SlopeBlockStateProperties.TRANSPARENT, false).setValue(SlopeBlockStateProperties.SLOPE_TYPE, SlopeType.north));
     }
 
     @OverridingMethodsMustInvokeSuper
