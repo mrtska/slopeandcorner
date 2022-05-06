@@ -3,8 +3,11 @@ package net.mrtska.slopeandcorner.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -17,6 +20,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.HitResult;
 import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 import net.mrtska.slopeandcorner.util.SlopeType;
 
@@ -92,6 +96,45 @@ public abstract class SlopeBlockBase extends Block implements EntityBlock, Simpl
         }
 
         return super.getSoundType(state, level, pos, entity);
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+
+        if (level.getBlockEntity(pos) instanceof SlopeBlockEntity entity) {
+
+            var stack = new ItemStack(this);
+            var tag = new CompoundTag();
+            tag.putString("BlockName", entity.getBlockName());
+            tag.putString("Texture", entity.getTexture());
+
+            var type = entity.getBlockType();
+            var newType = "";
+            if (type.startsWith("R")) {
+                newType += "R";
+            }
+            // Only use south direction.
+            newType += "SOUTH";
+            if (type.endsWith("2")) {
+                newType += "2";
+            }
+            tag.putString("BlockType", newType);
+
+            stack.setTag(tag);
+
+            return stack;
+        } else {
+
+            var stack = new ItemStack(this);
+            var tag = new CompoundTag();
+            tag.putString("BlockName", "spruce_planks");
+            tag.putString("BlockType", "SOUTH");
+            tag.putString("Texture", "spruce_planks");
+
+            stack.setTag(tag);
+
+            return stack;
+        }
     }
 
     @Nullable
