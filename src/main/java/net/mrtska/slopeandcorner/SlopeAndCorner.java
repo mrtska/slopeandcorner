@@ -23,6 +23,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mrtska.slopeandcorner.block.SlopeCreativeModeTab;
 import net.mrtska.slopeandcorner.corner.CornerBlock;
 import net.mrtska.slopeandcorner.corner.CornerItem;
+import net.mrtska.slopeandcorner.edgecorner.EdgeCornerBlock;
+import net.mrtska.slopeandcorner.edgecorner.EdgeCornerItem;
 import net.mrtska.slopeandcorner.model.SlopeModelLoader;
 import net.mrtska.slopeandcorner.slope.SlopeBlock;
 import net.mrtska.slopeandcorner.block.SlopeBlockEntity;
@@ -39,6 +41,7 @@ public class SlopeAndCorner {
 
     private static SlopeBlock slopeBlock;
     private static CornerBlock cornerBlock;
+    private static EdgeCornerBlock edgeCornerBlock;
 
 
     public SlopeAndCorner() {
@@ -63,6 +66,7 @@ public class SlopeAndCorner {
         // Set rendering layer as translucent.
         ItemBlockRenderTypes.setRenderLayer(slopeBlock, RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(cornerBlock, RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(edgeCornerBlock, RenderType.translucent());
         // Add grass block overlay coloring.
         var blockColors = Minecraft.getInstance().getBlockColors();
         blockColors.register((state,level, pos, tintIndex) -> {
@@ -70,9 +74,9 @@ public class SlopeAndCorner {
                 return -1;
             }
             return level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.get(0.5D, 1.0D);
-        }, slopeBlock, cornerBlock);
+        }, slopeBlock, cornerBlock, edgeCornerBlock);
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) ->
-                blockColors.getColor(Blocks.GRASS.defaultBlockState(), null, null, tintIndex), slopeBlock, cornerBlock);
+                blockColors.getColor(Blocks.GRASS.defaultBlockState(), null, null, tintIndex), slopeBlock, cornerBlock, edgeCornerBlock);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
@@ -94,10 +98,10 @@ public class SlopeAndCorner {
 
             slopeBlock = new SlopeBlock();
             cornerBlock = new CornerBlock();
+            edgeCornerBlock = new EdgeCornerBlock();
 
             // Register a new block here
-            event.getRegistry().register(slopeBlock);
-            event.getRegistry().register(cornerBlock);
+            event.getRegistry().registerAll(slopeBlock, cornerBlock, edgeCornerBlock);
         }
 
         @SubscribeEvent
@@ -105,11 +109,13 @@ public class SlopeAndCorner {
 
             event.getRegistry().register(new SlopeItem(slopeBlock, new SlopeCreativeModeTab(slopeBlock, "slope")));
             event.getRegistry().register(new CornerItem(cornerBlock, new SlopeCreativeModeTab(cornerBlock, "corner")));
+            event.getRegistry().register(new EdgeCornerItem(edgeCornerBlock, new SlopeCreativeModeTab(edgeCornerBlock, "edgecorner")));
         }
         @SubscribeEvent
         public static void onBlockEntityTypeRegistry(final RegistryEvent.Register<BlockEntityType<?>> event) {
 
-            BlockEntityTypes.slopeBlock = BlockEntityType.Builder.of(SlopeBlockEntity::new, slopeBlock).build(null).setRegistryName(MODID, "slopeblock");
+            BlockEntityTypes.slopeBlock = BlockEntityType.Builder.of(SlopeBlockEntity::new, slopeBlock, cornerBlock, edgeCornerBlock)
+                    .build(null).setRegistryName(MODID, "slopeblock");
             // Register a block entity types.
             event.getRegistry().register(BlockEntityTypes.slopeBlock);
         }

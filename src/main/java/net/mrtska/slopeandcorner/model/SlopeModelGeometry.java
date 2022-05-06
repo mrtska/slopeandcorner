@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.mrtska.slopeandcorner.corner.CornerModel;
+import net.mrtska.slopeandcorner.edgecorner.EdgeCornerModel;
 import net.mrtska.slopeandcorner.slope.SlopeModel;
 
 import java.util.Collection;
@@ -24,6 +25,7 @@ public class SlopeModelGeometry implements IModelGeometry<SlopeModelGeometry> {
         return switch (path) {
             case "slope", "slopeitem" -> new BakedSlopeModel(modelLocation, new SlopeModel());
             case "corner", "corneritem" -> new BakedSlopeModel(modelLocation, new CornerModel());
+            case "edgecorner", "edgecorneritem" -> new BakedSlopeModel(modelLocation, new EdgeCornerModel());
             default -> throw new IllegalStateException("Could not find baked model for " + path);
         };
     }
