@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -105,7 +106,7 @@ public class SlopeModelEntry {
 
         public SlopeModelBlock() {
 
-            this.vertex = new ArrayList<SlopeModelQuad>();
+            this.vertex = new ArrayList<>();
         }
 
         public void add(Direction side, SlopeModelQuad quad) {
@@ -114,43 +115,68 @@ public class SlopeModelEntry {
             vertex.add(quad);
         }
 
-        public List<BakedQuad> makeBakedQuad(TextureAtlasSprite... texture) {
+        public List<BakedQuad> makeBakedQuad(@Nullable TextureAtlasSprite down, @Nullable TextureAtlasSprite up, @Nullable TextureAtlasSprite north
+                , @Nullable TextureAtlasSprite east, @Nullable TextureAtlasSprite south, @Nullable TextureAtlasSprite west) {
 
-            List<BakedQuad> ret = new ArrayList<>();
+            var ret = new ArrayList<BakedQuad>();
 
+            for (var quad : this.vertex) {
 
-            Iterator<SlopeModelQuad> itr = this.vertex.iterator();
-            int i = 0;
-            while(itr.hasNext()) {
+                var vertex1 = quad.vertex.get(0);
+                var vertex2 = quad.vertex.get(1);
+                var vertex3 = quad.vertex.get(2);
+                var vertex4 = quad.vertex.get(3);
 
-                SlopeModelQuad quad = itr.next();
-                i = switch (quad.side) {
-                    case DOWN -> 0;
-                    case UP -> 1;
-                    case NORTH -> 2;
-                    case EAST -> 3;
-                    case SOUTH -> 4;
-                    case WEST -> 5;
-                };
-
-                SlopeModelVertex vertex1 = quad.vertex.get(0);
-                SlopeModelVertex vertex2 = quad.vertex.get(1);
-                SlopeModelVertex vertex3 = quad.vertex.get(2);
-                SlopeModelVertex vertex4 = quad.vertex.get(3);
-
-                if(texture[i].getName().toString().equals("minecraft:block/grass_block_top")) {
-
-                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), 1, quad.side, texture[i], false));
-                } else {
-
-                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(texture[i]), vertex2.vertexToInts(texture[i]), vertex3.vertexToInts(texture[i]), vertex4.vertexToInts(texture[i])), -1, quad.side, texture[i], false));
+                if (quad.side == Direction.DOWN && down != null) {
+                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(down), vertex2.vertexToInts(down),
+                            vertex3.vertexToInts(down), vertex4.vertexToInts(down)), -1, quad.side, down, false));
                 }
-                if(texture[i].getName().toString().equals("minecraft:block/grass_block_side")) {
+                if (quad.side == Direction.UP && up != null) {
 
-                    var side = SlopeModelBase.getTextureAtlasSprite("grass_block_side_overlay");
-                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side), vertex3.vertexToInts(side), vertex4.vertexToInts(side)), 1, quad.side, texture[i], false));
+                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(up), vertex2.vertexToInts(up),
+                            vertex3.vertexToInts(up), vertex4.vertexToInts(up)), up.getName().toString().equals("minecraft:block/grass_block_top") ? 1 : -1, quad.side, up, false));
+                }
+
+                var side = SlopeModelBase.getTextureAtlasSprite("grass_block_side_overlay");
+
+                if (quad.side == Direction.NORTH && north != null) {
+
+                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(north), vertex2.vertexToInts(north),
+                            vertex3.vertexToInts(north), vertex4.vertexToInts(north)), -1, quad.side, north, false));
+                    if(north.getName().toString().equals("minecraft:block/grass_block_side")) {
+                        ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side),
+                                vertex3.vertexToInts(side), vertex4.vertexToInts(side)), 1, quad.side, north, false));
+                    }
+                }
+                if (quad.side == Direction.EAST && east != null) {
+
+                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(east), vertex2.vertexToInts(east),
+                            vertex3.vertexToInts(east), vertex4.vertexToInts(east)), -1, quad.side, east, false));
+                    if(east.getName().toString().equals("minecraft:block/grass_block_side")) {
+                        ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side),
+                                vertex3.vertexToInts(side), vertex4.vertexToInts(side)), 1, quad.side, east, false));
+                    }
+                }
+                if (quad.side == Direction.SOUTH && south != null) {
+
+                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(south), vertex2.vertexToInts(south),
+                            vertex3.vertexToInts(south), vertex4.vertexToInts(south)), -1, quad.side, south, false));
+                    if(south.getName().toString().equals("minecraft:block/grass_block_side")) {
+                        ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side),
+                                vertex3.vertexToInts(side), vertex4.vertexToInts(side)), 1, quad.side, south, false));
+                    }
+                }
+                if (quad.side == Direction.WEST && west != null) {
+
+                    ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(west), vertex2.vertexToInts(west),
+                            vertex3.vertexToInts(west), vertex4.vertexToInts(west)), -1, quad.side, west, false));
+                    if(west.getName().toString().equals("minecraft:block/grass_block_side")) {
+                        ret.add(new BakedQuad(Ints.concat(vertex1.vertexToInts(side), vertex2.vertexToInts(side),
+                                vertex3.vertexToInts(side), vertex4.vertexToInts(side)), 1, quad.side, west, false));
+                    }
                 }
             }
+
             return ret;
         }
     }

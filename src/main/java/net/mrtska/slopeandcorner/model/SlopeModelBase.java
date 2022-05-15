@@ -3,10 +3,12 @@ package net.mrtska.slopeandcorner.model;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.mrtska.slopeandcorner.model.SlopeModelEntry.SlopeModelBlock;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,7 @@ public abstract class SlopeModelBase {
 
 
     //頂点データを返す テクスチャUV込み
-    public List<BakedQuad> getVertex(String blockType, String texture) {
+    public List<BakedQuad> getVertex(String blockType, String texture, @Nullable Direction side) {
 
         List<BakedQuad> ret = new ArrayList<>();
 
@@ -37,12 +39,14 @@ public abstract class SlopeModelBase {
 
         if (!texture.contains(",")) {
 
-            textureBottom = getTextureAtlasSprite(texture);
-            textureTop = textureBottom;
-            textureNorth = textureBottom;
-            textureEast = textureBottom;
-            textureSouth = textureBottom;
-            textureWest = textureBottom;
+            var sprite = getTextureAtlasSprite(texture);
+
+            textureBottom = side == null || side == Direction.DOWN ? sprite : null;
+            textureTop =  side == null || side == Direction.UP ? sprite : null;
+            textureNorth =  side == null || side == Direction.NORTH ? sprite : null;
+            textureEast =  side == null || side == Direction.EAST ? sprite : null;
+            textureSouth =  side == null || side == Direction.SOUTH ? sprite : null;
+            textureWest =  side == null || side == Direction.WEST ? sprite : null;
         } else {
 
             var faces = texture.split(",");
@@ -50,34 +54,29 @@ public abstract class SlopeModelBase {
             for (var face : faces) {
 
                 var tmp = face.split("=");
-                var side = tmp[0];
-                var sideTexture = tmp[1];
+                var direction = tmp[0];
+                var sideSprite = getTextureAtlasSprite(tmp[1]);
 
-                switch (side) {
-                    case "top" -> textureTop = getTextureAtlasSprite(sideTexture);
-                    case "bottom" -> textureBottom = getTextureAtlasSprite(sideTexture);
-                    case "north" -> textureNorth = getTextureAtlasSprite(sideTexture);
-                    case "east" -> textureEast = getTextureAtlasSprite(sideTexture);
-                    case "south" -> textureSouth = getTextureAtlasSprite(sideTexture);
-                    case "west" -> textureWest = getTextureAtlasSprite(sideTexture);
+                switch (direction) {
+                    case "top" -> textureTop = side == null || side == Direction.UP ? sideSprite : null;
+                    case "bottom" -> textureBottom = side == null || side == Direction.DOWN ? sideSprite : null;
+                    case "north" -> textureNorth = side == null || side == Direction.NORTH ? sideSprite : null;
+                    case "east" -> textureEast = side == null || side == Direction.EAST ? sideSprite : null;
+                    case "south" -> textureSouth = side == null || side == Direction.SOUTH ? sideSprite : null;
+                    case "west" -> textureWest = side == null || side == Direction.WEST ? sideSprite : null;
                     case "side" -> {
-                        textureNorth = getTextureAtlasSprite(sideTexture);
-                        textureEast = textureNorth;
-                        textureSouth = textureNorth;
-                        textureWest = textureNorth;
+                        textureNorth = side == null || side == Direction.NORTH ? sideSprite : null;
+                        textureEast = side == null || side == Direction.EAST ? sideSprite : null;
+                        textureSouth = side == null || side == Direction.SOUTH ? sideSprite : null;
+                        textureWest = side == null || side == Direction.WEST ? sideSprite : null;
                     }
                 }
             }
         }
 
-        if (textureTop == null || textureBottom == null || textureNorth == null || textureEast == null || textureSouth == null || textureWest == null) {
-
-            throw new IllegalStateException("Failed to get texture.");
-        }
-
         HashMap<String, SlopeModelBlock> map;
 
-        if(false) {
+        if(true) {
 
             vertex.clear();
             init();

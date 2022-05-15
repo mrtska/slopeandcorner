@@ -60,7 +60,7 @@ public class BakedSlopeModel implements BakedModel {
      */
     public void setModel(String blockType, String texture) {
 
-        this.vertexData = this.modelBase.getVertex(blockType, texture);
+        this.vertexData = this.modelBase.getVertex(blockType, texture, null);
     }
 
     @Override
@@ -82,13 +82,13 @@ public class BakedSlopeModel implements BakedModel {
 
             var texture = entity.getTexture();
             if (texture == null) {
-                this.vertexData = this.modelBase.getVertex("NORTH", "spruce_planks");
+                this.vertexData = this.modelBase.getVertex("NORTH", "spruce_planks", null);
             } else {
-                this.vertexData = this.modelBase.getVertex(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase(), texture);
+                this.vertexData = this.modelBase.getVertex(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase(), texture, side);
             }
         } else {
 
-            this.vertexData = this.modelBase.getVertex("NORTH", "spruce_planks");
+            this.vertexData = this.modelBase.getVertex("NORTH", "spruce_planks", null);
         }
 
 
@@ -107,7 +107,7 @@ public class BakedSlopeModel implements BakedModel {
             return this.vertexData;
         }
 
-        this.vertexData = this.modelBase.getVertex("NORTH","spruce_planks");
+        this.vertexData = this.modelBase.getVertex("NORTH","spruce_planks", null);
         return this.vertexData;
     }
 
