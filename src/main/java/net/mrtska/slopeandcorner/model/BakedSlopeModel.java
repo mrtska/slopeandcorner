@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.TransformationHelper;
 import net.mrtska.slopeandcorner.SlopeEntry;
+import net.mrtska.slopeandcorner.block.DoubledSlopeBlockEntity;
 import net.mrtska.slopeandcorner.block.SlopeBlockEntity;
 import net.mrtska.slopeandcorner.util.SlopeBlockStateProperties;
 
@@ -86,6 +87,18 @@ public class BakedSlopeModel implements BakedModel {
             } else {
                 this.vertexData = this.modelBase.getVertex(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE).getSerializedName().toUpperCase(), texture, side);
             }
+
+            if (extraData instanceof DoubledSlopeBlockEntity doubledEntity) {
+
+                var texture2 = doubledEntity.getTexture2();
+                if (texture2 == null) {
+                    this.vertexData.addAll(this.modelBase.getVertex("RSOUTH", "spruce_planks", null));
+                } else {
+                    this.vertexData.addAll(this.modelBase.getVertex(state.getValue(SlopeBlockStateProperties.SLOPE_TYPE2).getSerializedName().toUpperCase(), texture2, side));
+                }
+            }
+
+
         } else {
 
             this.vertexData = this.modelBase.getVertex("NORTH", "spruce_planks", null);
@@ -185,7 +198,11 @@ public class BakedSlopeModel implements BakedModel {
 
         if (data instanceof SlopeBlockEntity entity) {
 
-            return SlopeModelBase.getTextureAtlasSprite(SlopeEntry.getSlopeEntry(entity.getBlockName()).getParticle());
+            var sprite = SlopeEntry.getSlopeEntry(entity.getBlockName());
+
+            if (sprite != null) {
+                return SlopeModelBase.getTextureAtlasSprite(sprite.getParticle());
+            }
         }
         return SlopeModelBase.getTextureAtlasSprite("missingno");
     }

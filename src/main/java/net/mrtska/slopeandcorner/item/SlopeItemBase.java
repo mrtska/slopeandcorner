@@ -71,8 +71,6 @@ public abstract class SlopeItemBase extends BlockItem {
             }
 
             this.fillBlockEntity(entity, blockstate, player, tag);
-        } else {
-            return InteractionResult.FAIL;
         }
 
         level.gameEvent(player, GameEvent.BLOCK_PLACE, pos);

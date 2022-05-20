@@ -11,10 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -93,6 +90,11 @@ public abstract class SlopeBlockBase extends Block implements EntityBlock, Simpl
 
             var blockName = blockEntity.getBlockName();
 
+            // Return stone sound type when block name is null.
+            if (blockName == null) {
+
+                return Blocks.STONE.getSoundType(state, level, pos, entity);
+            }
             var block = Registry.BLOCK.get(new ResourceLocation(blockName));
 
             return block.getSoundType(block.defaultBlockState(), level, BlockPos.ZERO, entity);

@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "": { "model": "slopeandcorner:doubledslopeblock" }
+  },
+  "loader": "slopeandcorner:slope"
+}

@@ -20,6 +20,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.mrtska.slopeandcorner.block.DoubledSlopeBlockEntity;
 import net.mrtska.slopeandcorner.block.SlopeCreativeModeTab;
 import net.mrtska.slopeandcorner.corner.CornerBlock;
 import net.mrtska.slopeandcorner.corner.CornerItem;
@@ -29,7 +30,7 @@ import net.mrtska.slopeandcorner.model.SlopeModelLoader;
 import net.mrtska.slopeandcorner.slope.SlopeBlock;
 import net.mrtska.slopeandcorner.block.SlopeBlockEntity;
 import net.mrtska.slopeandcorner.slope.SlopeItem;
-
+import net.mrtska.slopeandcorner.slope.doubled.DoubledSlopeBlock;
 
 /**
  * Slope Mod core class.
@@ -42,6 +43,9 @@ public class SlopeAndCorner {
     private static SlopeBlock slopeBlock;
     private static CornerBlock cornerBlock;
     private static EdgeCornerBlock edgeCornerBlock;
+
+
+    public static DoubledSlopeBlock doubledSlopeBlock;
 
 
     public SlopeAndCorner() {
@@ -67,6 +71,7 @@ public class SlopeAndCorner {
         ItemBlockRenderTypes.setRenderLayer(slopeBlock, RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(cornerBlock, RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(edgeCornerBlock, RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(doubledSlopeBlock, RenderType.translucent());
         // Add grass block overlay coloring.
         var blockColors = Minecraft.getInstance().getBlockColors();
         blockColors.register((state,level, pos, tintIndex) -> {
@@ -74,7 +79,7 @@ public class SlopeAndCorner {
                 return -1;
             }
             return level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.get(0.5D, 1.0D);
-        }, slopeBlock, cornerBlock, edgeCornerBlock);
+        }, slopeBlock, cornerBlock, edgeCornerBlock, doubledSlopeBlock);
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) ->
                 blockColors.getColor(Blocks.GRASS.defaultBlockState(), null, null, tintIndex), slopeBlock, cornerBlock, edgeCornerBlock);
     }
@@ -88,6 +93,7 @@ public class SlopeAndCorner {
     public static class BlockEntityTypes {
 
         public static BlockEntityType<?> slopeBlock;
+        public static BlockEntityType<?> doubledSlopeBlock;
 
     }
 
@@ -99,9 +105,10 @@ public class SlopeAndCorner {
             slopeBlock = new SlopeBlock();
             cornerBlock = new CornerBlock();
             edgeCornerBlock = new EdgeCornerBlock();
+            doubledSlopeBlock = new DoubledSlopeBlock();
 
             // Register a new block here
-            event.getRegistry().registerAll(slopeBlock, cornerBlock, edgeCornerBlock);
+            event.getRegistry().registerAll(slopeBlock, cornerBlock, edgeCornerBlock, doubledSlopeBlock);
         }
 
         @SubscribeEvent
@@ -116,8 +123,10 @@ public class SlopeAndCorner {
 
             BlockEntityTypes.slopeBlock = BlockEntityType.Builder.of(SlopeBlockEntity::new, slopeBlock, cornerBlock, edgeCornerBlock)
                     .build(null).setRegistryName(MODID, "slopeblock");
+            BlockEntityTypes.doubledSlopeBlock = BlockEntityType.Builder.of(DoubledSlopeBlockEntity::new, doubledSlopeBlock)
+                    .build(null).setRegistryName(MODID, "doubledslopeblock");
             // Register a block entity types.
-            event.getRegistry().register(BlockEntityTypes.slopeBlock);
+            event.getRegistry().registerAll(BlockEntityTypes.slopeBlock, BlockEntityTypes.doubledSlopeBlock);
         }
     }
 }

@@ -159,7 +159,7 @@ public class SlopeBlock extends SlopeBlockBase {
             slopeType = "R";
         }
 
-        var rotationYaw = ((int) Mth.wrapDegrees((context.getPlayer().getYRot() + 180F) * 4F / 360F + (type2 ? 0.0F : 0.5F))) & 3;
+        var rotationYaw = ((int) Mth.wrapDegrees((context.getRotation() + 180F) * 4F / 360F + (type2 ? 0.0F : 0.5F))) & 3;
 
         switch (rotationYaw) {
             case 0 -> slopeType += "NORTH";

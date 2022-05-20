@@ -48,8 +48,57 @@ public enum SlopeType implements StringRepresentable {
         this.name = name;
     }
 
+    public static SlopeType parse(String name) {
+        return SlopeType.valueOf(name.toLowerCase());
+    }
+
     @Override
     public @Nonnull String getSerializedName() {
         return this.name;
+    }
+
+    public SlopeType opposite(boolean reversed) {
+
+        if (reversed) {
+
+            return switch (this) {
+                case north -> rsouth;
+                case east -> rwest;
+                case south -> rnorth;
+                case west -> reast;
+                case rnorth -> south;
+                case reast -> west;
+                case rsouth -> north;
+                case rwest -> east;
+                case north2 -> rsouth2;
+                case east2 -> rwest2;
+                case south2 -> rnorth2;
+                case west2 -> reast2;
+                case rnorth2 -> south2;
+                case reast2 -> west2;
+                case rsouth2 -> north2;
+                case rwest2 -> east2;
+            };
+        } else {
+
+            return switch (this) {
+                case north -> south;
+                case east -> west;
+                case south -> north;
+                case west -> east;
+                case rnorth -> rsouth;
+                case reast -> rwest;
+                case rsouth -> rnorth;
+                case rwest -> reast;
+                case north2 -> south2;
+                case east2 -> west2;
+                case south2 -> north2;
+                case west2 -> east2;
+                case rnorth2 -> rsouth2;
+                case reast2 -> rwest2;
+                case rsouth2 -> rnorth2;
+                case rwest2 -> reast2;
+            };
+        }
     }
 }

@@ -23,7 +23,7 @@ public class SlopeModelGeometry implements IModelGeometry<SlopeModelGeometry> {
         var path = modelLocation.getPath();
 
         return switch (path) {
-            case "slope", "slopeitem" -> new BakedSlopeModel(modelLocation, new SlopeModel());
+            case "slope", "slopeitem", "doubledslopeblock" -> new BakedSlopeModel(modelLocation, new SlopeModel());
             case "corner", "corneritem" -> new BakedSlopeModel(modelLocation, new CornerModel());
             case "edgecorner", "edgecorneritem" -> new BakedSlopeModel(modelLocation, new EdgeCornerModel());
             default -> throw new IllegalStateException("Could not find baked model for " + path);

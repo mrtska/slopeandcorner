@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
@@ -22,17 +23,21 @@ public class SlopeBlockEntity extends BlockEntity implements IModelData {
     /**
      * Slope block texture.
      */
-    private String texture;
+    private String texture = "";
 
     /**
      * Slope block direction.
      */
-    private String blockType;
+    private String blockType = "";
 
     /**
      * Original block registry name.
      */
-    private String blockName;
+    private String blockName = "";
+
+    public SlopeBlockEntity(BlockEntityType<?> entityType, BlockPos pos, BlockState state) {
+        super(entityType, pos, state);
+    }
 
     public SlopeBlockEntity(BlockPos pos, BlockState state) {
         super(SlopeAndCorner.BlockEntityTypes.slopeBlock, pos, state);
