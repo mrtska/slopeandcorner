@@ -40,9 +40,9 @@ public class SlopeAndCorner {
 
     public static final String MODID = "slopeandcorner";
 
-    private static SlopeBlock slopeBlock;
-    private static CornerBlock cornerBlock;
-    private static EdgeCornerBlock edgeCornerBlock;
+    public static SlopeBlock slopeBlock;
+    public static CornerBlock cornerBlock;
+    public static EdgeCornerBlock edgeCornerBlock;
 
 
     public static DoubledSlopeBlock doubledSlopeBlock;

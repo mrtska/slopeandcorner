@@ -5,10 +5,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
@@ -44,6 +48,42 @@ public abstract class SlopeBlockBase extends Block implements EntityBlock, Simpl
         builder.add(BlockStateProperties.WATERLOGGED);
         builder.add(SlopeBlockStateProperties.TRANSPARENT);
         builder.add(SlopeBlockStateProperties.SLOPE_TYPE);
+    }
+
+    @Override
+    public void playerDestroy(@Nonnull Level level, @Nonnull Player player, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable BlockEntity entity, @Nonnull ItemStack stack) {
+
+        if (!(entity instanceof SlopeBlockEntity blockEntity)) {
+            return;
+        }
+
+        var f = EntityType.ITEM.getHeight() / 2.0F;
+        var rx = (double)((float)pos.getX() + 0.5F) + Mth.nextDouble(level.random, -0.25D, 0.25D);
+        var ry = (double)((float)pos.getY() + 0.5F) + Mth.nextDouble(level.random, -0.25D, 0.25D) - (double)f;
+        var rz = (double)((float)pos.getZ() + 0.5F) + Mth.nextDouble(level.random, -0.25D, 0.25D);
+
+        var type = blockEntity.getBlockType();
+        var newType = "";
+        if (type.startsWith("R")) {
+            newType += "R";
+        }
+        // Only use south direction.
+        newType += "SOUTH";
+        if (type.endsWith("2")) {
+            newType += "2";
+        }
+
+        stack = new ItemStack(this);
+        var tag = new CompoundTag();
+        tag.putString("BlockName", blockEntity.getBlockName());
+        tag.putString("BlockType", newType);
+        tag.putString("Texture", blockEntity.getTexture());
+
+        stack.setTag(tag);
+        var item = new ItemEntity(level, rx, ry, rz, stack);
+        item.setDefaultPickUpDelay();
+
+        level.addFreshEntity(item);
     }
 
     public boolean useShapeForLightOcclusion(@Nonnull BlockState state) {

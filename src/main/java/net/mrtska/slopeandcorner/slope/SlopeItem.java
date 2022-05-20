@@ -53,6 +53,7 @@ public class SlopeItem extends SlopeItemBase {
                 doubledEntity.setBlockName(entity.getBlockName());
                 doubledEntity.setBlockType2(blockType.opposite(!blockType.getSerializedName().contains("2")).getSerializedName().toUpperCase());
                 doubledEntity.setTexture2(texture2);
+                doubledEntity.setBlockName2(tag.getString("BlockName"));
             }
 
             return bool;
